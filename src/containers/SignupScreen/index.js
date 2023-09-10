@@ -8,10 +8,9 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Avatar} from 'react-native-elements';
-import LinearGradient from 'react-native-linear-gradient';
 import styles from './styles';
 
-const SignUpScreen = () => {
+const SignUpScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,10 +27,11 @@ const SignUpScreen = () => {
     setPassword(text);
   };
 
+  const handleLogin = () => {
+    navigation.navigate('LOGIN');
+  };
+
   return (
-    // <LinearGradient
-    //   colors={['#B296FF', '#C1D2DC']} // Replace with your desired gradient colors
-    //   style={styles.gradient}>
     <View style={styles.container}>
       <Avatar
         rounded
@@ -75,14 +75,19 @@ const SignUpScreen = () => {
         <View style={styles.line}></View>
       </View>
 
-      <Icon.Button
+      {/* <Icon.Button
         name="facebook"
         backgroundColor="#3b5998"
         style={styles.facebookButton}>
         Login with Facebook
-      </Icon.Button>
+      </Icon.Button> */}
+      <TouchableOpacity onPress={handleLogin}>
+        <Text>
+          Already Registered?
+          <Text style={styles.LoginText}>Sign In</Text>
+        </Text>
+      </TouchableOpacity>
     </View>
-    // </LinearGradient>
   );
 };
 

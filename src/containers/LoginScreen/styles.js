@@ -6,10 +6,7 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#DEDEDE',
-  },
-  avatar: {
-    marginBottom: 20,
+    backgroundColor: '#DEDEDE', // Background color
   },
   header: {
     fontSize: 24,
@@ -24,10 +21,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingLeft: 10,
     width: '100%',
-    backgroundColor: 'white', // White background for text fields
+    backgroundColor: 'white', // Input field background color
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#007AFF', // Button background color
     borderRadius: 5,
     height: 40,
     justifyContent: 'center',
@@ -38,31 +35,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-  },
-  orContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 10,
-  },
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: 'gray',
-  },
-  orText: {
-    marginHorizontal: 10,
-    fontSize: 16,
-  },
-  facebookButton: {
-    marginTop: 10,
-    width: '100%',
-  },
-  LoginText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#007AFF',
-    textDecorationLine: 'underline',
   },
 });
 
