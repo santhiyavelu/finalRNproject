@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {DashBoardScreen, LoginScreen, SignUpScreen} from '../containers';
 import auth from '@react-native-firebase/auth';
 import {useEffect, useState} from 'react';
+import DrawerNavigation from '../drawernavigation';
 
 const Stack = createNativeStackNavigator();
 
