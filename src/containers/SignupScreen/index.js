@@ -9,6 +9,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Avatar} from 'react-native-elements';
 import styles from './styles';
+import auth from '@react-native-firebase/auth';
 
 const SignUpScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
@@ -29,6 +30,25 @@ const SignUpScreen = ({navigation}) => {
 
   const handleLogin = () => {
     navigation.navigate('LOGIN');
+  };
+
+  const handleSignup = () => {
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
   };
 
   return (
@@ -65,7 +85,7 @@ const SignUpScreen = ({navigation}) => {
         onChangeText={handlePasswordChange}
       />
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleSignup}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
 

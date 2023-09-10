@@ -1,5 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {LoginScreen, SignUpScreen} from '../containers';
+import auth from '@react-native-firebase/auth';
+import {useEffect, useState} from 'react';
 
 const Stack = createNativeStackNavigator();
 

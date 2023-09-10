@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import styles from './styles';
+import auth from '@react-native-firebase/auth';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
@@ -21,7 +22,14 @@ const LoginScreen = ({navigation}) => {
   };
 
   const handleLogin = () => {
-    // Perform login logic here
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(response => {
+        console.log(response, 'signin successful');
+      })
+      .catch(error => {
+        console.log(error, error);
+      });
   };
 
   return (
