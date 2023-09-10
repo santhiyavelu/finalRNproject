@@ -2,6 +2,7 @@ import React from 'react';
 import {Text, Button} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import DrawerNavigation from '../../drawernavigation';
 
 const DashBoardScreen = () => {
   const navigation = useNavigation();
@@ -16,6 +17,7 @@ const DashBoardScreen = () => {
 
   return (
     <>
+      {/* <DrawerNavigation /> */}
       <Button
         title="Go Locale"
         onPress={() => {

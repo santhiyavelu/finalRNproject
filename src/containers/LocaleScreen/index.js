@@ -11,7 +11,6 @@ const LocaleScreen = () => {
 
   return (
     <View>
-      <Text>test locale</Text>
       <Text>{LocalizationHelper.t('hello')}</Text>
 
       <TouchableOpacity
