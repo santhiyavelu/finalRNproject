@@ -3,6 +3,8 @@ import LoginScreen from './LoginScreen';
 import DashBoardScreen from './DashboardScreen';
 import LocaleScreen from './LocaleScreen';
 import FavouritePlace from './FavouritePlace';
+import MapScreen from './MapScreen/MapScreen';
+import MapController from './MapScreen/MapController';
 
 export {
   SignUpScreen,
@@ -10,4 +12,6 @@ export {
   DashBoardScreen,
   LocaleScreen,
   FavouritePlace,
+  MapScreen,
+  MapController,
 };
