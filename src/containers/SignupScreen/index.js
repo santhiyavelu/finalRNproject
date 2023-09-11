@@ -2,26 +2,12 @@ import React, {useState} from 'react';
 import {View, Text, TextInput, TouchableOpacity} from 'react-native';
 import {Avatar} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
-import {Formik} from 'formik';
-import * as yup from 'yup';
 import styles from './styles';
 
 const SignUpScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const signupValidationSchema = yup.object().shape({
-    username: yup.string().required('Full Name is required'),
-    email: yup
-      .string()
-      .email('Please enter a valid email')
-      .required('Email is required'),
-    password: yup
-      .string()
-      .min(8, 'Password must be at least 6 characters')
-      .required('Password is required'),
-  });
 
   const handleUsernameChange = text => {
     setUsername(text);
@@ -41,10 +27,7 @@ const SignUpScreen = ({navigation}) => {
 
   const handleSignup = async values => {
     try {
-      await auth().createUserWithEmailAndPassword(
-        values.email,
-        values.password,
-      );
+      await auth().createUserWithEmailAndPassword(email, password);
       console.log('User account created & signed in!');
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
@@ -52,7 +35,7 @@ const SignUpScreen = ({navigation}) => {
       } else if (error.code === 'auth/invalid-email') {
         console.log('That email address is invalid!');
       } else {
-        console.error(error);
+        console.error(error, 'signup');
       }
     }
   };
@@ -69,54 +52,34 @@ const SignUpScreen = ({navigation}) => {
 
       <Text style={styles.header}>Sign Up</Text>
 
-      <Formik
-        initialValues={{
-          username: '',
-          email: '',
-          password: '',
-        }}
-        validationSchema={signupValidationSchema}
-        onSubmit={handleSignup}>
-        {({values, handleChange, handleSubmit, errors, touched}) => (
-          <>
-            <TextInput
-              style={styles.input}
-              placeholder="Full Name"
-              value={values.username}
-              onChangeText={handleChange('username')}
-            />
-            {touched.username && errors.username && (
-              <Text style={styles.errorText}>{errors.username}</Text>
-            )}
+      <>
+        <TextInput
+          style={styles.input}
+          placeholder="Full Name"
+          value={username}
+          onChangeText={handleUsernameChange}
+        />
 
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              keyboardType="email-address"
-              value={values.email}
-              onChangeText={handleChange('email')}
-            />
-            {touched.email && errors.email && (
-              <Text style={styles.errorText}>{errors.email}</Text>
-            )}
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={handleEmailChange}
+        />
 
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              secureTextEntry
-              value={values.password}
-              onChangeText={handleChange('password')}
-            />
-            {touched.password && errors.password && (
-              <Text style={styles.errorText}>{errors.password}</Text>
-            )}
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          value={password}
+          onChangeText={handlePasswordChange}
+        />
 
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Sign Up</Text>
-            </TouchableOpacity>
-          </>
-        )}
-      </Formik>
+        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
+      </>
 
       <View style={styles.orContainer}>
         <View style={styles.line}></View>

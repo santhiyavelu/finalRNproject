@@ -8,9 +8,14 @@ import {
   StyleSheet,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import {useDispatch, useSelector} from 'react-redux';
+import {logIn} from '../feature/userSlice/UserSlice';
 
 const FavouritePlace = ({navigation}) => {
   const [placeList, setPlaceList] = useState([]);
+  const uid = useSelector(state => state.user?.user?.uid);
+
+  console.log(uid, 'useridinplace');
 
   useEffect(() => {
     const placeCollection = firestore().collection('UserMyPlaces');
@@ -40,7 +45,9 @@ const FavouritePlace = ({navigation}) => {
     try {
       const placeCollection = await firestore()
         .collection('UserMyPlaces')
+        .where('uid', '==', uid)
         .get();
+      console.log(placeCollection.docs, 'placeCollection.docs');
       setPlaceList(placeCollection.docs);
     } catch (err) {
       console.log(err);
