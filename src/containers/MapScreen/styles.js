@@ -33,10 +33,32 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
+  addPlaceButton: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    backgroundColor: 'blue',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addPlaceButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
   logoutButton: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
     backgroundColor: 'red',
     padding: 16,
+    borderRadius: 8,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logoutButtonText: {
+    color: 'white',
   },
 });
 

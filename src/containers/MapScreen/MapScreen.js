@@ -28,7 +28,7 @@ const MapScreen = ({initialLatitude, initialLongitude}) => {
   });
 
   const handleSearch = () => {
-    // Parse latitude and longitude from the searchText (assuming searchText is in the format "lat,lng")
+    // Parse latitude and longitude)
     const [latitude, longitude] = searchText.split(',').map(parseFloat);
 
     if (!isNaN(latitude) && !isNaN(longitude)) {
@@ -61,13 +61,14 @@ const MapScreen = ({initialLatitude, initialLongitude}) => {
         searchText
       ) {
         const {latitude, longitude} = mapRegion;
-        const placeName = searchText;
+        const placeName = searchText; // Use the entered searchText as placeName
 
         // Add a new document to the 'UserMyPlaces' collection with the specified data
         await placeCollection.add({
           latitude,
           longitude,
-          placeName,
+          placeName, // Use searchText as placeName
+          userId: auth().currentUser.uid, // Assuming you want to associate the place with the currently logged-in user
         });
 
         // Optionally, provide user feedback that the place has been added.
@@ -100,10 +101,9 @@ const MapScreen = ({initialLatitude, initialLongitude}) => {
         region={mapRegion} // Use the updated mapRegion here
         showsUserLocation
       />
-      <TouchableOpacity style={styles.addButton} onPress={handleAddPlace}>
-        <Text>Add Place</Text>
+      <TouchableOpacity style={styles.addPlaceButton} onPress={handleAddPlace}>
+        <Text style={styles.addPlaceButtonText}>Add Place</Text>
       </TouchableOpacity>
-
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text>LOGOUT</Text>
       </TouchableOpacity>
