@@ -1,14 +1,18 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+// LocaleScreen.js
+import React from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import {changeLanguage} from '../../feature/localeSlice/LocalSlice';
 import {LocalizationHelper} from '../../helpers';
 import styles from './styles';
 
 const LocaleScreen = () => {
-  const [someVal, setSomeVal] = useState(undefined);
+  const language = useSelector(state => state.language);
+  const dispatch = useDispatch();
 
-  LocalizationHelper.onChange(() => {
-    console.log('I18n has changed!');
-  });
+  const handleLanguageChange = newLanguage => {
+    dispatch(changeLanguage(newLanguage));
+  };
 
   return (
     <View style={styles.container}>
@@ -16,42 +20,33 @@ const LocaleScreen = () => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          style={someVal === '1' ? styles.selectedButton : styles.button}
-          onPress={() => {
-            setSomeVal('1');
-            LocalizationHelper.locale = 'en';
-          }}>
+          style={language === 'en' ? styles.selectedButton : styles.button}
+          onPress={() => handleLanguageChange('en')}>
           <Text
             style={
-              someVal === '1' ? styles.selectedButtonText : styles.buttonText
+              language === 'en' ? styles.selectedButtonText : styles.buttonText
             }>
             EN
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={someVal === '2' ? styles.selectedButton : styles.button}
-          onPress={() => {
-            setSomeVal('2');
-            LocalizationHelper.locale = 'ur';
-          }}>
+          style={language === 'ur' ? styles.selectedButton : styles.button}
+          onPress={() => handleLanguageChange('ur')}>
           <Text
             style={
-              someVal === '2' ? styles.selectedButtonText : styles.buttonText
+              language === 'ur' ? styles.selectedButtonText : styles.buttonText
             }>
             UR
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={someVal === '3' ? styles.selectedButton : styles.button}
-          onPress={() => {
-            setSomeVal('3');
-            LocalizationHelper.locale = 'fr';
-          }}>
+          style={language === 'fr' ? styles.selectedButton : styles.button}
+          onPress={() => handleLanguageChange('fr')}>
           <Text
             style={
-              someVal === '3' ? styles.selectedButtonText : styles.buttonText
+              language === 'fr' ? styles.selectedButtonText : styles.buttonText
             }>
             FR
           </Text>

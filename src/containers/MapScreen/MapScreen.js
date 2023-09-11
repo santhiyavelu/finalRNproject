@@ -83,6 +83,7 @@ const MapScreen = ({initialLatitude, initialLongitude}) => {
 
   return (
     <View style={styles.container}>
+      <Text>Hello</Text>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
