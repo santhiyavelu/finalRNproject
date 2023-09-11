@@ -2,35 +2,41 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
-  },
-  subtitle: {
-    fontSize: 18,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  map: {
-    flex: 1,
-    width: '100%',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
-  input: {
+  searchInput: {
     flex: 1,
-    marginRight: 8,
-    paddingLeft: 8,
+    height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    borderRadius: 8,
-    height: 40,
+    borderRadius: 4,
+    paddingHorizontal: 8,
+  },
+  searchButton: {
+    marginLeft: 8,
+    backgroundColor: '#007AFF',
+    borderRadius: 4,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  searchButtonText: {
+    color: 'white',
+  },
+  map: {
+    flex: 1,
+  },
+  logoutButton: {
+    backgroundColor: 'red',
+    padding: 16,
+    alignItems: 'center',
   },
 });
 

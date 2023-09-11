@@ -1,6 +1,5 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {DashBoardScreen, LocaleScreen} from '../containers';
-// import {} from '../containers';
+import {DashBoardScreen, LocaleScreen, FavouritePlace} from '../containers';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,6 +20,12 @@ const DrawerNavigation = () => {
           headerTitle: 'Locale',
         }}
       />
+      <Drawer.Screen
+        name="FavouritePlaces"
+        component={FavouritePlace}
+        options={{
+          headerShown: true,
+        }}></Drawer.Screen>
     </Drawer.Navigator>
   );
 };
