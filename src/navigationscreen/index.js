@@ -12,9 +12,7 @@ const NavigationScreen = () => {
   const getMainStack = () => {
     return (
       <Stack.Group>
-        <Stack.Screen
-          name="DASHBOARD"
-          component={DashBoardScreen}></Stack.Screen>
+        <Stack.Screen name="Home" component={DrawerNavigation} />
       </Stack.Group>
     );
   };

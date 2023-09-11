@@ -66,6 +66,7 @@ const SignUpScreen = ({navigation}) => {
         activeOpacity={0.7}
         containerStyle={styles.avatar}
       />
+
       <Text style={styles.header}>Sign Up</Text>
 
       <Formik
