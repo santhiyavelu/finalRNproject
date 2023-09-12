@@ -8,40 +8,39 @@ import {
   StyleSheet,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import styles from './styles';
 
 const FavouritePlace = ({navigation}) => {
   const [placeList, setPlaceList] = useState([]);
   const uid = useSelector(state => state.user?.user?.uid);
+  const placeCollection = firestore().collection('UserMyPlaces');
 
   console.log(uid, 'useridinplace');
 
   useEffect(() => {
-    const placeCollection = firestore().collection('UserMyPlaces');
-
-    const unsubscribe = placeCollection
-      .where('uid', '==', uid)
+    const subscribe = placeCollection
+      .where('userId', '==', uid) // Filter by userId
       .onSnapshot(querySnapshot => {
-        const updatedPlaceList = [];
-        querySnapshot.forEach(doc => {
-          const data = doc.data();
-          updatedPlaceList.push({
-            id: doc.id,
-            latitude: data.latitude,
-            longitude: data.longitude,
-            placeName: data.placeName,
-          });
+        const updatedPlaceList = querySnapshot.docs.map(doc => {
+          const place = doc.data();
+          return {
+            latitude: place.latitude,
+            longitude: place.longitude,
+            placeName: place.placeName,
+            userName: place.userName,
+            userId: place.userId,
+          };
         });
-        setPlaceList(updatedPlaceList);
+        setPlaceList(updatedPlaceList); // Update state with the retrieved data
       });
 
     return () => {
-      if (unsubscribe) {
-        unsubscribe();
+      if (subscribe) {
+        subscribe();
       }
     };
-  }, []);
+  }, [uid]);
 
   return (
     <View style={styles.container}>
@@ -56,7 +55,14 @@ const FavouritePlace = ({navigation}) => {
             </Text>
           </View>
         )}
+        keyExtractor={item => item.userId} // Provide a unique key for each item
       />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('MAPS');
+        }}>
+        <Text>Add Place</Text>
+      </TouchableOpacity>
     </View>
   );
 };

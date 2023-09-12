@@ -12,11 +12,14 @@ import auth from '@react-native-firebase/auth';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import styles from './styles';
 import firestore from '@react-native-firebase/firestore';
+import {useSelector, useDispatch} from 'react-redux';
+import {logOut} from '../../feature/userSlice/UserSlice';
 
 const MapScreen = ({initialLatitude, initialLongitude}) => {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState('');
-  const [markers, setMarkers] = useState([]);
+  const uid = useSelector(state => state.user?.user?.uid);
+  const dispatch = useDispatch();
 
   const placeCollection = firestore().collection('UserMyPlaces');
 
@@ -28,10 +31,9 @@ const MapScreen = ({initialLatitude, initialLongitude}) => {
   });
 
   const handleSearch = () => {
-    // Parse latitude and longitude)
     const [latitude, longitude] = searchText.split(',').map(parseFloat);
 
-    if (!isNaN(latitude) && !isNaN(longitude)) {
+    if (latitude && longitude) {
       // Update the mapRegion with the new latitude and longitude
       setMapRegion({
         latitude,
@@ -40,44 +42,34 @@ const MapScreen = ({initialLatitude, initialLongitude}) => {
         longitudeDelta: 0.0421,
       });
     } else {
-      console.warn('Invalid latitude or longitude');
+      console.log('Invalid latitude or longitude');
     }
   };
 
   const handleLogout = async () => {
     try {
-      await auth().signOut();
+      dispatch(logOut());
     } catch (error) {
       console.error('Error logging out:', error);
     }
   };
 
   const handleAddPlace = async () => {
-    try {
-      // Ensure that you have a valid latitude, longitude, and place name
-      if (
-        !isNaN(mapRegion.latitude) &&
-        !isNaN(mapRegion.longitude) &&
-        searchText
-      ) {
-        const {latitude, longitude} = mapRegion;
-        const placeName = searchText; // Use the entered searchText as placeName
+    if (mapRegion.latitude && mapRegion.longitude) {
+      const {latitude, longitude} = mapRegion;
+      const placeName = 'testplace'; //searchText;
 
-        // Add a new document to the 'UserMyPlaces' collection with the specified data
-        await placeCollection.add({
-          latitude,
-          longitude,
-          placeName, // Use searchText as placeName
-          userId: auth().currentUser.uid, // Assuming you want to associate the place with the currently logged-in user
-        });
+      await placeCollection.add({
+        latitude: latitude,
+        longitude: longitude,
+        placeName: placeName, // Use searchText as placeName
+        userId: uid,
+        userName: 'test',
+      });
 
-        // Optionally, provide user feedback that the place has been added.
-        console.log('Place added successfully!');
-      } else {
-        console.warn('Invalid latitude, longitude, or place name');
-      }
-    } catch (error) {
-      console.error('Error adding place:', error);
+      console.log(placeCollection, 'Place added successfully!');
+    } else {
+      console.log('Invalid latitude, longitude, or place name');
     }
   };
 

@@ -9,7 +9,7 @@ import {logIn} from '../feature/userSlice/UserSlice';
 const Stack = createNativeStackNavigator();
 
 const NavigationScreen = () => {
-  const [isuser, isSetuser] = useState(false);
+  const [isuser, isSetuser] = useState(useSelector(state => state.isLoggedin));
   const dispatch = useDispatch();
 
   const getMainStack = () => {
