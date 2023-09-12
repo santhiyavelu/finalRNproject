@@ -14,9 +14,10 @@ import styles from './styles';
 import firestore from '@react-native-firebase/firestore';
 import {useSelector, useDispatch} from 'react-redux';
 import {logOut} from '../../feature/userSlice/UserSlice';
+import useLocale from '../../helpers/LocalizationHelper';
 
 const MapScreen = ({initialLatitude, initialLongitude}) => {
-  const navigation = useNavigation();
+  const {i18n, setLocale} = useLocale();
   const [searchText, setSearchText] = useState('');
   const uid = useSelector(state => state.user?.user?.uid);
   const dispatch = useDispatch();
@@ -75,7 +76,10 @@ const MapScreen = ({initialLatitude, initialLongitude}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Hello</Text>
+      <Text>{i18n.t('hello')}</Text>
+      <Text>
+        {i18n.t('welcome')} {i18n.t('haveANiceDay')}
+      </Text>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}

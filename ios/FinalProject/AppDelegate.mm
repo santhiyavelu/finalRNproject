@@ -10,7 +10,7 @@
   //firebase
   [FIRApp configure];
   //Map key
-   [GMSServices provideAPIKey:@"AIzaSyB4uOPrlEUJjx-tCcPm7BY5fn1gLwtB4BA"];
+   [GMSServices provideAPIKey:@"AIzaSyCoO6U745TXpW0izoMKg3fActvqTFHsu5M"];
   self.moduleName = @"FinalProject";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.

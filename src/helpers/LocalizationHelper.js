@@ -1,27 +1,38 @@
 import {useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {I18n} from 'i18n-js';
+import {changeLanguage} from '../feature/localeSlice/LocalSlice';
 
 const i18n = new I18n({
   en: {
     hello: 'Hello',
-  },
-  ur: {
-    hello: 'Haan jee',
+    maps: 'MAPS',
+    dashboard: 'Dashboard',
+    welcome: 'Welcome!',
+    haveANiceDay: 'Have a Nice day.',
   },
   fr: {
     hello: 'Bonjour',
+    maps: 'CARTES',
+    dashboard: 'Tableau de bord',
+    welcome: 'Bienvenue!',
+    haveANiceDay: 'Passez une bonne journée.',
   },
 });
 
-const I18nWrapper = () => {
-  const language = useSelector(state => state.language);
+function useLocale() {
+  const dispatch = useDispatch();
+  const language = useSelector(state => state.locale.language);
 
   useEffect(() => {
     i18n.locale = language;
   }, [language]);
 
-  return null;
-};
+  const setLocale = locale => {
+    dispatch(changeLanguage(locale)); // Dispatch the Redux action to update the language
+  };
 
-export default I18nWrapper;
+  return {i18n, setLocale};
+}
+
+export default useLocale;
