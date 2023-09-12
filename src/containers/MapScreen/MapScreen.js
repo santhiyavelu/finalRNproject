@@ -32,27 +32,33 @@ const MapScreen = ({initialLatitude, initialLongitude, mapRef}) => {
     longitudeDelta: 0.0421,
   });
 
-  const handleSearch = () => {
-    if (mapRegion.latitude && mapRegion.longitude) {
-      console.log(mapRegion, 'mapregion1');
+  const handleSearch = details => {
+    if (details && details.geometry && details.geometry.location) {
+      console.log(details, 'details');
+      // Extract the latitude and longitude from the selected place's details
+      const {geometry} = details;
+      const {location} = geometry;
+      const {lat, lng} = location;
+
       // Update the mapRegion with the new latitude and longitude
       setMapRegion({
-        latitude: mapRegion.latitude,
-        longitude: mapRegion.longitude,
+        latitude: lat,
+        longitude: lng,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
+
       if (mapRef.current) {
-        console.log(mapRegion, 'mapregionfromcurrent');
+        // Move the map to the selected place
         mapRef.current.animateToRegion({
-          latitude: mapRegion.latitude,
-          longitude: mapRegion.longitude,
+          latitude: lat,
+          longitude: lng,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         });
       }
     } else {
-      console.log('Invalid latitude or longitude');
+      console.log('Invalid place details');
     }
   };
 
@@ -95,6 +101,7 @@ const MapScreen = ({initialLatitude, initialLongitude, mapRef}) => {
           fetchDetails={true}
           onPress={(data, details = null) => {
             console.log(data);
+            handleSearch(details);
             setSearchText(data.description); // Set the selected place description as the search text
             // Handle latitude and longitude here if needed
             // Move the map to the selected place
