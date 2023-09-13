@@ -1,16 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
 
 const MapScreen = ({initialLocation, mapRef}) => {
   const [searchText, setSearchText] = useState('');
+  const [markerLocation, setMarkerLocation] = useState(null);
   const placeCollection = firestore().collection('UserMyPlaces');
   const uid = useSelector(state => state.user?.user?.uid);
 
   useEffect(() => {
+    const lat = initialLocation.latitude;
+    const lng = initialLocation.longitude;
+    console.log(lat, lng, 'display marker');
     if (mapRef.current) {
       mapRef.current.animateToRegion({
         ...initialLocation,
@@ -18,6 +22,7 @@ const MapScreen = ({initialLocation, mapRef}) => {
         longitudeDelta: 0.0421,
       });
     }
+    setMarkerLocation({latitude: lat, longitude: lng}); // Set marker coordinates
   }, [initialLocation, mapRef]);
 
   const handleSearch = details => {
@@ -34,17 +39,17 @@ const MapScreen = ({initialLocation, mapRef}) => {
           longitudeDelta: 0.0421,
         });
       }
+      setMarkerLocation({latitude: lat, longitude: lng}); // Set marker coordinates
     }
   };
 
   function generateUniqueId() {
-    // Create a unique ID based on the current timestamp
     return new Date().getTime().toString();
   }
 
   const handleAddPlace = async () => {
-    if (initialLocation.latitude && initialLocation.longitude) {
-      const {latitude, longitude} = initialLocation;
+    if (markerLocation && searchText) {
+      const {latitude, longitude} = markerLocation;
 
       // Generate a unique ID for the new place
       const newPlaceId = generateUniqueId(); // You should implement this function
@@ -106,8 +111,15 @@ const MapScreen = ({initialLocation, mapRef}) => {
           longitudeDelta: 0.0421,
         }}
         showsUserLocation
-        ref={mapRef}
-      />
+        ref={mapRef}>
+        {markerLocation && (
+          <Marker
+            coordinate={markerLocation}
+            title="Selected Location"
+            pinColor="red" // Customize the marker's color
+          />
+        )}
+      </MapView>
       <TouchableOpacity style={styles.addPlaceButton} onPress={handleAddPlace}>
         <Text style={styles.addPlaceButtonText}>Add Place</Text>
       </TouchableOpacity>

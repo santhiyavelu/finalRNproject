@@ -1,5 +1,5 @@
 import React, {useEffect, useCallback} from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
 import {LocationHelper} from '../../helpers';
@@ -12,15 +12,14 @@ const UpdatePositionScreen = () => {
     return Math.round(new Date().getTime() / 1000);
   };
 
-  // Define the updatePosition function
   const updatePosition = useCallback(async () => {
     try {
       // Use LocationHelper to fetch the current location
       LocationHelper.fetchLocation(
         async position => {
-          const {latitude, longitude} = position.coords;
+          const {latitude, longitude, speed} = position.coords;
+          console.log(position, 'updatescreen');
 
-          // Replace with your user-specific data
           const author = 'santhiya@test.com';
           const userId = uid;
 
@@ -29,8 +28,8 @@ const UpdatePositionScreen = () => {
             author,
             currentLatitude: latitude,
             currentLongitude: longitude,
-            locationTime: getUnixTimeStamp(),
-            speed: 1,
+            locationTime: position.timestamp,
+            speed: speed,
             userId: uid,
             userName: author,
           });
@@ -47,7 +46,7 @@ const UpdatePositionScreen = () => {
   }, [uid]);
 
   useEffect(() => {
-    // Set up an interval to update position every 5 minutes (300,000 milliseconds)
+    //setting interval
     const intervalId = setInterval(updatePosition, 300000);
 
     // Clean up the interval when the component unmounts
@@ -56,10 +55,13 @@ const UpdatePositionScreen = () => {
     };
   }, [updatePosition]);
 
+  useEffect(() => {
+    updatePosition();
+  }, [updatePosition]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Updating Position</Text>
-      <Button title="Update Now" onPress={updatePosition} />
     </View>
   );
 };

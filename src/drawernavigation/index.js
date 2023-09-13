@@ -34,14 +34,14 @@ const DrawerNavigation = () => {
         }}
       />
       <Drawer.Screen
-        name={i18n.t('favouritePlaces')} // Translate the screen name
+        name="FavouritePlaces"
         component={FavouritePlace}
         options={{
           headerShown: true,
         }}
       />
       <Drawer.Screen
-        name="UpdatePositionScreen" // Translate the screen name
+        name="UpdatePositionScreen"
         component={UpdatePositionScreen}
         options={{
           headerShown: true,
@@ -49,19 +49,19 @@ const DrawerNavigation = () => {
       />
 
       <Drawer.Screen
-        name="userList"
+        name="UserList"
         component={userListScreen}
         options={{
           headerShown: true,
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="userplaces"
         component={UserPlacesScreen}
         options={{
           headerShown: true,
         }}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 };

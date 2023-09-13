@@ -1,5 +1,10 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {DashBoardScreen, LoginScreen, SignUpScreen} from '../containers';
+import {
+  DashBoardScreen,
+  LoginScreen,
+  SignUpScreen,
+  UserPlacesScreen,
+} from '../containers';
 import auth from '@react-native-firebase/auth';
 import {useEffect, useState} from 'react';
 import DrawerNavigation from '../drawernavigation';
@@ -19,6 +24,7 @@ const NavigationScreen = () => {
     return (
       <Stack.Group>
         <Stack.Screen name="Home" component={DrawerNavigation} />
+        <Stack.Screen name="userplaces" component={UserPlacesScreen} />
       </Stack.Group>
     );
   };
