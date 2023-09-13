@@ -82,7 +82,7 @@ const MapScreen = ({initialLocation, mapRef, routeParams}) => {
               setSearchText(data.description);
             }}
             query={{
-              key: 'YOUR_API_KEY', // Replace with your Google Maps API key
+              key: 'AIzaSyCoO6U745TXpW0izoMKg3fActvqTFHsu5M', // Replace with your Google Maps API key
               language: 'en',
             }}
             styles={{

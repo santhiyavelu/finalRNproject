@@ -23,7 +23,18 @@ const UserPlacesScreen = ({route, navigation}) => {
           .get();
 
         const places = querySnapshot.docs.map(doc => doc.data());
-        setUserPlaces(places);
+
+        // Filter out duplicates based on placeName
+        const uniquePlacesObject = {};
+        const uniquePlaces = places.filter(place => {
+          if (!uniquePlacesObject[place.placeName]) {
+            uniquePlacesObject[place.placeName] = true;
+            return true;
+          }
+          return false;
+        });
+
+        setUserPlaces(uniquePlaces);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

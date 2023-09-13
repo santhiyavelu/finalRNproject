@@ -22,16 +22,13 @@ const FavouritePlace = ({navigation}) => {
     const subscribe = placeCollection
       .where('userId', '==', uid) // Filter by userId
       .onSnapshot(querySnapshot => {
-        const updatedPlaceList = querySnapshot.docs.map(doc => {
-          const place = doc.data();
-          return {
-            latitude: place.latitude,
-            longitude: place.longitude,
-            placeName: place.placeName,
-            userName: place.userName,
-            userId: place.userId,
-          };
-        });
+        const updatedPlaceList = querySnapshot.docs
+          .map(doc => doc.data()) // filter unique place
+          .filter(
+            (place, index, self) =>
+              index === self.findIndex(p => p.placeName === place.placeName),
+          );
+
         setPlaceList(updatedPlaceList); // Update state with the retrieved data
       });
 
