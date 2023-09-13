@@ -35,8 +35,6 @@ const DashboardScreen = ({navigation, route}) => {
       <TouchableOpacity
         onPress={() => {
           dispatch(logOut()); // Dispatch the logOut action
-          // Navigate to the login screen or any other appropriate screen
-          navigation.navigate('Login'); // Replace 'Login' with your desired screen
         }}
         style={styles.logoutButton}>
         <Text style={styles.logoutButtonText}>Logout</Text>
