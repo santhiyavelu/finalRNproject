@@ -46,24 +46,28 @@ const MapScreen = ({initialLocation, mapRef, routeParams}) => {
     }
   };
 
-  function generateUniqueId() {
-    return new Date().getTime().toString();
-  }
-
   const handleAddPlace = async () => {
     if (markerLocation && searchText) {
       const {latitude, longitude} = markerLocation;
 
-      const newPlaceId = generateUniqueId();
-      await placeCollection.doc(newPlaceId).set({
+      const placeDetails = {
         latitude: latitude,
         longitude: longitude,
         placeName: searchText,
-        userId: uid,
         userName: 'santhiya',
-      });
+        userId: uid,
+      };
 
-      console.log('Place added successfully with ID:', newPlaceId);
+      // Use 'add' to automatically generate a unique ID for the document
+      placeCollection
+        .add(placeDetails)
+        .then(docRef => {
+          console.log('Place added successfully with ID:', docRef.id);
+          console.log(placeDetails);
+        })
+        .catch(error => {
+          console.error('Error adding place:', error);
+        });
     } else {
       console.log('Invalid latitude, longitude, or place name');
     }
