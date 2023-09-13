@@ -1,6 +1,13 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {DashBoardScreen, LocaleScreen, FavouritePlace} from '../containers';
+import {
+  DashBoardScreen,
+  LocaleScreen,
+  FavouritePlace,
+  userListScreen,
+  UserPlacesScreen,
+  MapScreen,
+} from '../containers';
 import useLocale from '../helpers/LocalizationHelper';
 
 const Drawer = createDrawerNavigator();
@@ -11,7 +18,7 @@ const DrawerNavigation = () => {
   return (
     <Drawer.Navigator>
       <Drawer.Screen
-        name={i18n.t('maps')} // Translate the screen name
+        name="Dashboard" // Translate the screen name
         component={DashBoardScreen}
         options={{
           headerShown: true,
@@ -28,6 +35,28 @@ const DrawerNavigation = () => {
       <Drawer.Screen
         name={i18n.t('favouritePlaces')} // Translate the screen name
         component={FavouritePlace}
+        options={{
+          headerShown: true,
+        }}
+      />
+      {/* <Drawer.Screen
+        name="MapScreen" // Translate the screen name
+        component={MapScreen}
+        options={{
+          headerShown: true,
+        }}
+      /> */}
+
+      <Drawer.Screen
+        name="userList"
+        component={userListScreen}
+        options={{
+          headerShown: true,
+        }}
+      />
+      <Drawer.Screen
+        name="userplaces"
+        component={UserPlacesScreen}
         options={{
           headerShown: true,
         }}

@@ -8,11 +8,14 @@ import {
 } from 'react-native';
 import styles from './styles';
 import auth from '@react-native-firebase/auth';
+import {logIn} from '../../feature/userSlice/UserSlice';
+import {useDispatch} from 'react-redux';
 
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch = useDispatch();
   const handleEmailChange = text => {
     setEmail(text);
   };
@@ -26,6 +29,7 @@ const LoginScreen = ({navigation}) => {
       auth()
         .signInWithEmailAndPassword(email, password)
         .then(response => {
+          dispatch(logIn({uid: response.user.uid, email}));
           console.log(response, 'signin successful');
         })
         .catch(error => {

@@ -9,7 +9,10 @@ import {logIn} from '../feature/userSlice/UserSlice';
 const Stack = createNativeStackNavigator();
 
 const NavigationScreen = () => {
-  const [isuser, isSetuser] = useState(useSelector(state => state.isLoggedin));
+  const isuser = useSelector(state => state.user.isLoggedin);
+
+  console.log(isuser, 'statevalue');
+
   const dispatch = useDispatch();
 
   const getMainStack = () => {
@@ -28,20 +31,6 @@ const NavigationScreen = () => {
       </Stack.Group>
     );
   };
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(userObject => {
-      console.log(userObject.email, 'uid');
-      const {uid, email} = userObject;
-      const userData = {uid, email}; // Create an object with uid and email
-      dispatch(logIn(userData));
-      console.log(userObject, 'userobject');
-
-      isSetuser(userObject);
-    });
-
-    return subscriber;
-  }, []);
 
   return (
     <Stack.Navigator>

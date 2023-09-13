@@ -5,6 +5,8 @@ import LocaleScreen from './LocaleScreen';
 import FavouritePlace from './FavouritePlace';
 import MapScreen from './MapScreen/MapScreen';
 import MapController from './MapScreen/MapController';
+import userListScreen from './UserListScreen';
+import UserPlacesScreen from './UserPlaceScreen';
 
 export {
   SignUpScreen,
@@ -14,4 +16,6 @@ export {
   FavouritePlace,
   MapScreen,
   MapController,
+  userListScreen,
+  UserPlacesScreen,
 };

@@ -3,6 +3,8 @@ import {View, Text, TextInput, TouchableOpacity} from 'react-native';
 import {Avatar} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import styles from './styles';
+import {useDispatch} from 'react-redux';
+import {logIn} from '../../feature/userSlice/UserSlice';
 
 const SignUpScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
@@ -13,6 +15,7 @@ const SignUpScreen = ({navigation}) => {
     setUsername(text);
   };
 
+  const dispatch = useDispatch();
   const handleEmailChange = text => {
     setEmail(text);
   };
@@ -28,6 +31,7 @@ const SignUpScreen = ({navigation}) => {
   const handleSignup = async values => {
     try {
       await auth().createUserWithEmailAndPassword(email, password);
+      dispatch(logIn({email: email, uid: auth().currentUser.uid}));
       console.log('User account created & signed in!');
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {

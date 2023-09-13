@@ -4,14 +4,19 @@ import {View, StyleSheet} from 'react-native';
 import MapScreen from '../MapScreen/MapScreen';
 import MapController from '../MapScreen/MapController';
 
-const DashboardScreen = () => {
+const DashboardScreen = ({navigation, route}) => {
   const [currentLocation, setCurrentLocation] = useState({
     latitude: 37.78825,
     longitude: -122.4324,
   });
 
+  console.log(route.params, 'router');
+  // const userplacelat = route.params.latitude;
+  // const userplacelon = route.params.longitude;
+
   const handleLocationChange = useCallback((latitude, longitude) => {
     setCurrentLocation({latitude, longitude});
+    // setCurrentLocation({userplacelat, userplacelon});
   }, []);
 
   const mapRef = useRef(null); // Define mapRef

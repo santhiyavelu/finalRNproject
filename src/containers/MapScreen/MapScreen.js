@@ -17,7 +17,13 @@ import {logOut} from '../../feature/userSlice/UserSlice';
 import useLocale from '../../helpers/LocalizationHelper';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
-const MapScreen = ({initialLatitude, initialLongitude, mapRef}) => {
+const MapScreen = ({
+  navigation,
+  initialLatitude,
+  initialLongitude,
+  mapRef,
+  route,
+}) => {
   const {i18n, setLocale} = useLocale();
   const [searchText, setSearchText] = useState('');
   const uid = useSelector(state => state.user?.user?.uid);
