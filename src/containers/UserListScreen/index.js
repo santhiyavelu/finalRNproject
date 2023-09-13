@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import styles from './styles';
 
 const UserListScreen = ({navigation}) => {
   const [userList, setUserList] = useState([]);
@@ -40,13 +41,18 @@ const UserListScreen = ({navigation}) => {
   };
 
   return (
-    <View>
-      <Text>User List</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>User List</Text>
       <FlatList
         data={userList}
         renderItem={({item}) => (
-          <TouchableOpacity onPress={() => navigateToUserPlaces(item.userId)}>
-            <Text>{item.userName}</Text>
+          <TouchableOpacity
+            style={styles.userItem}
+            onPress={() => navigateToUserPlaces(item.userId)}>
+            <Text style={styles.userText}>
+              {`${item.userName} - `}
+              <Text style={styles.clickableUserId}>{item.userId}</Text>
+            </Text>
           </TouchableOpacity>
         )}
         keyExtractor={item => item.userId}

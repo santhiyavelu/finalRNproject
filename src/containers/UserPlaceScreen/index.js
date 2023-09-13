@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import styles from './style';
 
 const UserPlacesScreen = ({route, navigation}) => {
   console.log(route, 'route details');
@@ -26,13 +27,14 @@ const UserPlacesScreen = ({route, navigation}) => {
   }, [userId]);
 
   return (
-    <View>
-      <Text>User's Places</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>User's Places</Text>
       <FlatList
         data={userPlaces}
         renderItem={({item}) => (
-          <View>
+          <View style={styles.placeItem}>
             <TouchableOpacity
+              style={styles.placeButton}
               onPress={() =>
                 navigation.navigate('Dashboard', {
                   latitude: item.latitude,
@@ -40,10 +42,11 @@ const UserPlacesScreen = ({route, navigation}) => {
                   placeName: item.placeName,
                 })
               }>
-              <Text>{item.placeName}</Text>
+              <Text style={styles.placeButtonText}>{item.placeName}</Text>
             </TouchableOpacity>
-            <Text>Latitude: {item.latitude}</Text>
-            <Text>Longitude: {item.longitude}</Text>
+            <Text style={styles.placeDetails}>
+              Latitude: {item.latitude} | Longitude: {item.longitude}
+            </Text>
             {/* Add more details as needed */}
           </View>
         )}
