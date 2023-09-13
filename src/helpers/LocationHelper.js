@@ -42,9 +42,13 @@ class LocationHelper {
         distanceFilter: 0.05,
         useSignificantChanges: true,
         showsBackgroundLocationIndicator: true,
-        interval: 1000,
+        interval: 5000,
       },
     );
+  };
+
+  stopLocationTracking = () => {
+    GeoLocation.stopObserving();
   };
 
   checkLocationPermission = (successCallback, failureCallback) => {
