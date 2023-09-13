@@ -1,35 +1,31 @@
-// DashboardScreen.js
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {View, StyleSheet} from 'react-native';
 import MapScreen from '../MapScreen/MapScreen';
 import MapController from '../MapScreen/MapController';
 
 const DashboardScreen = ({navigation, route}) => {
-  const [currentLocation, setCurrentLocation] = useState({
-    latitude: 37.78825,
-    longitude: -122.4324,
-  });
-
-  console.log(route.params, 'router');
-  // const userplacelat = route.params.latitude;
-  // const userplacelon = route.params.longitude;
-
-  const handleLocationChange = useCallback((latitude, longitude) => {
-    setCurrentLocation({latitude, longitude});
-    // setCurrentLocation({userplacelat, userplacelon});
-  }, []);
-
   const mapRef = useRef(null); // Define mapRef
+
+  const getInitialLocation = () => {
+    if (route.params && route.params.latitude && route.params.longitude) {
+      console.log(route.params, 'route');
+      return {
+        latitude: parseFloat(route.params.latitude), // Parse as float
+        longitude: parseFloat(route.params.longitude),
+      };
+    }
+    // If route.params is not available, use default coordinates
+    return {
+      latitude: 37.78825, // Default latitude
+      longitude: -122.4324, // Default longitude
+    };
+  };
 
   return (
     <View style={styles.container}>
-      <MapController onLocationChange={handleLocationChange} mapRef={mapRef} />
       {/* Pass mapRef */}
-      <MapScreen
-        initialLatitude={currentLocation.latitude}
-        initialLongitude={currentLocation.longitude}
-        mapRef={mapRef} // Pass mapRef
-      />
+      {/* <MapController mapRef={mapRef} /> */}
+      <MapScreen initialLocation={getInitialLocation()} mapRef={mapRef} />
     </View>
   );
 };

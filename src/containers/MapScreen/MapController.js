@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Platform} from 'react-native';
 import {LocationHelper} from '../../helpers';
 
-const MapController = ({onLocationChange, mapRef}) => {
+const MapController = ({mapRef}) => {
   const [locationFetched, setLocationFetched] = useState(false);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const MapController = ({onLocationChange, mapRef}) => {
         },
       );
     }
-  }, [locationFetched, onLocationChange]);
+  }, [locationFetched]);
 
   return null;
 };
