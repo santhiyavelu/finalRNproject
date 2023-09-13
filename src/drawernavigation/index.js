@@ -7,6 +7,7 @@ import {
   userListScreen,
   UserPlacesScreen,
   MapScreen,
+  UpdatePositionScreen,
 } from '../containers';
 import useLocale from '../helpers/LocalizationHelper';
 
@@ -39,13 +40,13 @@ const DrawerNavigation = () => {
           headerShown: true,
         }}
       />
-      {/* <Drawer.Screen
-        name="MapScreen" // Translate the screen name
-        component={MapScreen}
+      <Drawer.Screen
+        name="UpdatePositionScreen" // Translate the screen name
+        component={UpdatePositionScreen}
         options={{
           headerShown: true,
         }}
-      /> */}
+      />
 
       <Drawer.Screen
         name="userList"

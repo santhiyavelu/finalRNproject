@@ -1,7 +1,6 @@
 import React, {useCallback, useRef} from 'react';
 import {View, StyleSheet} from 'react-native';
 import MapScreen from '../MapScreen/MapScreen';
-import MapController from '../MapScreen/MapController';
 
 const DashboardScreen = ({navigation, route}) => {
   const mapRef = useRef(null); // Define mapRef
@@ -24,7 +23,6 @@ const DashboardScreen = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       {/* Pass mapRef */}
-      {/* <MapController mapRef={mapRef} /> */}
       <MapScreen initialLocation={getInitialLocation()} mapRef={mapRef} />
     </View>
   );

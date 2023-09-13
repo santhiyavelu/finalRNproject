@@ -6,6 +6,7 @@ import styles from './style';
 const UserPlacesScreen = ({route, navigation}) => {
   console.log(route, 'route details');
   const {userId} = route.params;
+  console.log(userId);
   const [userPlaces, setUserPlaces] = useState([]);
 
   useEffect(() => {

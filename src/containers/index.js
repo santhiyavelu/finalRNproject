@@ -4,9 +4,9 @@ import DashBoardScreen from './DashboardScreen';
 import LocaleScreen from './LocaleScreen';
 import FavouritePlace from './FavouritePlace';
 import MapScreen from './MapScreen/MapScreen';
-import MapController from './MapScreen/MapController';
 import userListScreen from './UserListScreen';
 import UserPlacesScreen from './UserPlaceScreen';
+import UpdatePositionScreen from './UpdatePositionScreen';
 
 export {
   SignUpScreen,
@@ -15,7 +15,7 @@ export {
   LocaleScreen,
   FavouritePlace,
   MapScreen,
-  MapController,
   userListScreen,
   UserPlacesScreen,
+  UpdatePositionScreen,
 };
