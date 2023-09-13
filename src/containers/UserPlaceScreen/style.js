@@ -12,24 +12,37 @@ const styles = StyleSheet.create({
   },
   placeItem: {
     marginBottom: 16,
-    padding: 16,
-    backgroundColor: '#F4F4F4',
-    borderRadius: 8,
   },
   placeButton: {
-    backgroundColor: '#1faadb',
-    paddingVertical: 10,
-    borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 12,
+    elevation: 3,
   },
-  placeButtonText: {
-    color: 'white',
-    fontSize: 18,
+  placeContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  placeInfo: {
+    flex: 1,
+  },
+  placeName: {
+    fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'center',
+    color: '#333', // Adjust the color to your preference
+  },
+  mapIcon: {
+    width: 34,
+    height: 34,
+    marginLeft: 8,
   },
   placeDetails: {
-    fontSize: 16,
     marginTop: 8,
+    fontSize: 14,
+    color: 'gray',
   },
 });
 

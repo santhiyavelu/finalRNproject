@@ -1,13 +1,15 @@
 import React, {useCallback, useRef} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import MapScreen from '../MapScreen/MapScreen';
+import {useDispatch} from 'react-redux';
+import {logOut} from '../../feature/userSlice/UserSlice';
 
 const DashboardScreen = ({navigation, route}) => {
   const mapRef = useRef(null); // Define mapRef
+  const dispatch = useDispatch();
 
   const getInitialLocation = () => {
     if (route.params && route.params.latitude && route.params.longitude) {
-      console.log(route.params, 'route');
       return {
         latitude: parseFloat(route.params.latitude), // Parse as float
         longitude: parseFloat(route.params.longitude),
@@ -22,8 +24,23 @@ const DashboardScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      {/* Pass mapRef */}
-      <MapScreen initialLocation={getInitialLocation()} mapRef={mapRef} />
+      {/* MapScreen */}
+      <MapScreen
+        initialLocation={getInitialLocation()}
+        mapRef={mapRef}
+        routeParams={route.params}
+        style={styles.map} // Apply styles to the MapScreen component
+      />
+      {/* Logout button */}
+      <TouchableOpacity
+        onPress={() => {
+          dispatch(logOut()); // Dispatch the logOut action
+          // Navigate to the login screen or any other appropriate screen
+          navigation.navigate('Login'); // Replace 'Login' with your desired screen
+        }}
+        style={styles.logoutButton}>
+        <Text style={styles.logoutButtonText}>Logout</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -31,6 +48,24 @@ const DashboardScreen = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between', // Arrange items vertically with space in-between
+  },
+  map: {
+    flex: 1, // Make the MapScreen take up all available space
+  },
+  logoutButton: {
+    position: 'absolute',
+    bottom: -2, // Adjust the bottom position as needed
+    alignSelf: 'center', // Center horizontally
+    backgroundColor: 'red', // Customize the button's background color
+    paddingVertical: 2,
+    paddingHorizontal: 5,
+    borderRadius: 15,
+  },
+  logoutButtonText: {
+    color: 'white', // Customize the button's text color
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

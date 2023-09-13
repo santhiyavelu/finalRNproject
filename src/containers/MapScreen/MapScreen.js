@@ -5,16 +5,17 @@ import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 import firestore from '@react-native-firebase/firestore';
 import {useSelector} from 'react-redux';
 
-const MapScreen = ({initialLocation, mapRef}) => {
+const MapScreen = ({initialLocation, mapRef, routeParams}) => {
   const [searchText, setSearchText] = useState('');
   const [markerLocation, setMarkerLocation] = useState(null);
   const placeCollection = firestore().collection('UserMyPlaces');
   const uid = useSelector(state => state.user?.user?.uid);
+  const hideSearch = routeParams?.hideSearch;
 
   useEffect(() => {
     const lat = initialLocation.latitude;
     const lng = initialLocation.longitude;
-    console.log(lat, lng, 'display marker');
+
     if (mapRef.current) {
       mapRef.current.animateToRegion({
         ...initialLocation,
@@ -22,7 +23,8 @@ const MapScreen = ({initialLocation, mapRef}) => {
         longitudeDelta: 0.0421,
       });
     }
-    setMarkerLocation({latitude: lat, longitude: lng}); // Set marker coordinates
+
+    setMarkerLocation({latitude: lat, longitude: lng});
   }, [initialLocation, mapRef]);
 
   const handleSearch = details => {
@@ -39,7 +41,8 @@ const MapScreen = ({initialLocation, mapRef}) => {
           longitudeDelta: 0.0421,
         });
       }
-      setMarkerLocation({latitude: lat, longitude: lng}); // Set marker coordinates
+
+      setMarkerLocation({latitude: lat, longitude: lng});
     }
   };
 
@@ -51,9 +54,7 @@ const MapScreen = ({initialLocation, mapRef}) => {
     if (markerLocation && searchText) {
       const {latitude, longitude} = markerLocation;
 
-      // Generate a unique ID for the new place
-      const newPlaceId = generateUniqueId(); // You should implement this function
-
+      const newPlaceId = generateUniqueId();
       await placeCollection.doc(newPlaceId).set({
         latitude: latitude,
         longitude: longitude,
@@ -70,38 +71,41 @@ const MapScreen = ({initialLocation, mapRef}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <GooglePlacesAutocomplete
-          placeholder="Search"
-          fetchDetails={true}
-          onPress={(data, details = null) => {
-            console.log(data);
-            handleSearch(details);
-            setSearchText(data.description);
-          }}
-          query={{
-            key: 'AIzaSyCoO6U745TXpW0izoMKg3fActvqTFHsu5M',
-            language: 'en',
-          }}
-          styles={{
-            textInputContainer: {
-              backgroundColor: 'rgba(0,0,0,0)',
-              borderTopWidth: 0,
-              borderBottomWidth: 0,
-            },
-            textInput: {
-              marginLeft: 0,
-              marginRight: 0,
-              height: 38,
-              color: '#5d5d5d',
-              fontSize: 16,
-            },
-            predefinedPlacesDescription: {
-              color: '#1faadb',
-            },
-          }}
-        />
-      </View>
+      {/* Conditionally render the GooglePlacesAutocomplete based on hideSearch */}
+      {!hideSearch && (
+        <View style={styles.searchContainer}>
+          <GooglePlacesAutocomplete
+            placeholder="Search"
+            fetchDetails={true}
+            onPress={(data, details = null) => {
+              handleSearch(details);
+              setSearchText(data.description);
+            }}
+            query={{
+              key: 'YOUR_API_KEY', // Replace with your Google Maps API key
+              language: 'en',
+            }}
+            styles={{
+              textInputContainer: {
+                backgroundColor: 'rgba(0,0,0,0)',
+                borderTopWidth: 0,
+                borderBottomWidth: 0,
+              },
+              textInput: {
+                marginLeft: 0,
+                marginRight: 0,
+                height: 38,
+                color: '#5d5d5d',
+                fontSize: 16,
+              },
+              predefinedPlacesDescription: {
+                color: '#1faadb',
+              },
+            }}
+          />
+        </View>
+      )}
+
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
@@ -116,7 +120,7 @@ const MapScreen = ({initialLocation, mapRef}) => {
           <Marker
             coordinate={markerLocation}
             title="Selected Location"
-            pinColor="red" // Customize the marker's color
+            pinColor="red"
           />
         )}
       </MapView>

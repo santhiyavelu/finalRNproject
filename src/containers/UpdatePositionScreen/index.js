@@ -8,34 +8,6 @@ const UpdatePositionScreen = () => {
   const uid = useSelector(state => state.user?.user?.uid);
   console.log(uid, 'userid');
 
-  const updatePosition = useCallback(
-    async locationObject => {
-      try {
-        const {latitude, longitude, speed} = locationObject.coords;
-        console.log(locationObject, 'updatescreen');
-
-        const author = 'santhiya@test.com';
-        const userId = uid;
-
-        // Create a new position document in the 'UsersPosition' collection
-        await firestore().collection('UsersPosition').doc(userId).set({
-          author,
-          currentLatitude: latitude,
-          currentLongitude: longitude,
-          locationTime: locationObject.timestamp,
-          speed: speed,
-          userId: uid,
-          userName: author,
-        });
-
-        console.log('Position updated successfully:', latitude, longitude);
-      } catch (error) {
-        console.error('Error updating position:', error);
-      }
-    },
-    [uid],
-  );
-
   useEffect(() => {
     LocationHelper.checkLocationPermission(
       () => {
@@ -58,6 +30,34 @@ const UpdatePositionScreen = () => {
       LocationHelper.stopLocationTracking();
     };
   }, [updatePosition]);
+
+  const updatePosition = useCallback(
+    async locationObject => {
+      try {
+        const {latitude, longitude, speed} = locationObject.coords;
+        console.log(locationObject, 'updatescreen');
+
+        const author = 'SAN';
+        const userId = uid;
+
+        // Create a new position document in the 'UsersPosition' collection
+        await firestore().collection('UsersPosition').doc(userId).set({
+          author,
+          currentLatitude: latitude,
+          currentLongitude: longitude,
+          locationTime: locationObject.timestamp,
+          speed: speed,
+          userId: uid,
+          userName: author,
+        });
+
+        console.log('Position updated successfully:', latitude, longitude);
+      } catch (error) {
+        console.error('Error updating position:', error);
+      }
+    },
+    [uid],
+  );
 
   return (
     <View style={styles.container}>
