@@ -7,7 +7,8 @@ const i18n = new I18n({
   en: {
     hello: 'Hello',
     maps: 'MAPS',
-    dashboard: 'Dashboard',
+    NewPlace: 'New Place',
+    myApp: 'My App', // Added translation for "My App"
     welcome: 'Welcome!',
     haveANiceDay: 'Have a Nice day.',
   },
@@ -17,6 +18,8 @@ const i18n = new I18n({
     dashboard: 'Tableau de bord',
     welcome: 'Bienvenue!',
     haveANiceDay: 'Passez une bonne journée.',
+    NewPlace: 'Nouveau lieu', // Added translation for "NewPlace"
+    myApp: 'Mon application', // Added translation for "My App"
   },
 });
 

@@ -4,7 +4,7 @@ import MapView, {Marker} from 'react-native-maps';
 import firestore from '@react-native-firebase/firestore';
 import MapControl from '../../controls/Mapcontrol';
 
-const UserMapView = () => {
+const UserLocation = () => {
   const [markers, setMarkers] = useState([]);
   const [userPlaces, setUserPlaces] = useState([]);
   const [isMapReady, setIsMapReady] = useState(false);
@@ -69,7 +69,7 @@ const UserMapView = () => {
   );
 };
 
-export default UserMapView;
+export default UserLocation;
 
 const styles = StyleSheet.create({
   container: {

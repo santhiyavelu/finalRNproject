@@ -1,25 +1,25 @@
 import SignUpScreen from './SignupScreen';
 import LoginScreen from './LoginScreen';
-import DashBoardScreen from './DashboardScreen';
 import LocaleScreen from './LocaleScreen';
 import FavouritePlace from './FavouritePlace';
 import MapScreen from './NewPlace';
 import userListScreen from './UserListScreen';
 import UserPlacesScreen from './UserPlaceScreen';
 import UpdatePositionScreen from './UpdatePositionScreen';
-import UserMapView from './UsersMapView';
+import UserLocation from './UsersLocation';
 import UserProfile from './UserProfile';
+import NewPlaceScreen from './NewPlace';
 
 export {
   SignUpScreen,
   LoginScreen,
-  DashBoardScreen,
   LocaleScreen,
   FavouritePlace,
   MapScreen,
   userListScreen,
   UserPlacesScreen,
   UpdatePositionScreen,
-  UserMapView,
+  UserLocation,
   UserProfile,
+  NewPlaceScreen,
 };

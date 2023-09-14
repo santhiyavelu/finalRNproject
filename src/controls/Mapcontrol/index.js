@@ -14,7 +14,7 @@ const Map = forwardRef((props, ref) => {
   }));
   const renderMarkers = () => {
     if (props.markers?.length) {
-      console.log(props.markers, 'markerssss');
+      console.log(props.markers, 'markerfromuserlocation');
       return props.markers.map((marker, idx) => {
         return (
           <Marker

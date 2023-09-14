@@ -7,8 +7,10 @@ import {
   StyleSheet,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import RectangleColorPicker from 'react-native-rectangle-color-picker';
+import {logOut} from '../../feature/userSlice/UserSlice';
+import styles from './styles';
 
 const UserProfile = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
@@ -16,8 +18,8 @@ const UserProfile = ({navigation}) => {
   const [selectedColor, setSelectedColor] = useState('#000000');
   const uid = useSelector(state => state.user?.user?.uid);
   const [documentId, setDocumentId] = useState('');
+  const dispatch = useDispatch();
 
-  // Use a separate useEffect for fetching the document ID
   useEffect(() => {
     if (uid) {
       const fetchDocumentId = async () => {
@@ -28,7 +30,6 @@ const UserProfile = ({navigation}) => {
             .get();
 
           if (!querySnapshot.empty) {
-            // Assuming there's only one matching document, so we take the first one
             const document = querySnapshot.docs[0];
             setDocumentId(document.id);
           }
@@ -54,7 +55,6 @@ const UserProfile = ({navigation}) => {
         color: selectedColor,
       });
 
-      // Reset input fields and documentId after updating
       setFirstName('');
       setLastName('');
       setSelectedColor('#000000');
@@ -64,11 +64,6 @@ const UserProfile = ({navigation}) => {
     }
   };
 
-  const changeColor = colorHsv =>
-    setSelectedColor({oldColor: tinycolor(colorHsv).toHexString()});
-
-  console.log(`Selected color in hexadecimal: ${selectedColor}`);
-
   return (
     <View style={styles.container}>
       <Text style={styles.label}>First Name:</Text>
@@ -76,64 +71,37 @@ const UserProfile = ({navigation}) => {
         style={styles.input}
         value={firstName}
         onChangeText={text => setFirstName(text)}
+        placeholder="Enter your first name"
       />
-
       <Text style={styles.label}>Last Name:</Text>
       <TextInput
         style={styles.input}
         value={lastName}
         onChangeText={text => setLastName(text)}
+        placeholder="Enter your last name"
       />
-
       <Text style={styles.label}>Select Color:</Text>
       <RectangleColorPicker
-        onColorSelected={color => {
-          setSelectedColor(color);
-          console.log(`Selected color in hexadecimal: ${color}`);
-        }}
+        onColorSelected={color => setSelectedColor(color)}
         defaultColor={selectedColor}
-        colorPickerStyle={{width: 250, height: 250}}
+        colorPickerStyle={styles.colorPicker}
         diamond={true}
         staticPalette={true}
       />
-
-      <TouchableOpacity style={styles.button} onPress={handleUpdate}>
-        <Text style={styles.buttonText}>Add/Update</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleUpdate}>
+          <Text style={styles.buttonText}>Add/Update</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(logOut());
+          }}
+          style={styles.logoutButton}>
+          <Text style={styles.logoutButtonText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 4,
-    padding: 8,
-    marginBottom: 16,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignSelf: 'center',
-    marginBottom: 16,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-});
 
 export default UserProfile;

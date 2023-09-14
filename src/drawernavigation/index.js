@@ -2,23 +2,24 @@ import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {
-  DashBoardScreen,
   LocaleScreen,
   FavouritePlace,
   userListScreen,
   UserPlacesScreen,
   MapScreen,
   UpdatePositionScreen,
-  UserMapView,
+  UserLocation,
   UserProfile,
+  NewPlaceScreen,
 } from '../containers';
 import useLocale from '../helpers/LocalizationHelper';
-import NewPlaceScreen from '../containers/NewPlace';
+import {ScrollView} from 'react-native';
+import useLogout from '../hooks/uselogout';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerContent = ({navigation}) => (
-  <View style={styles.drawerContent}>
+  <ScrollView contentContainerStyle={styles.drawerContent}>
     <View style={styles.drawerHeader}>
       <Image
         source={require('../assets/images/draw.png')}
@@ -28,18 +29,8 @@ const DrawerContent = ({navigation}) => (
     </View>
     <TouchableOpacity
       style={styles.drawerItem}
-      onPress={() => navigation.navigate('Dashboard')}>
-      <Text style={styles.drawerItemText}>Dashboard</Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-      style={styles.drawerItem}
       onPress={() => navigation.navigate('Newplace')}>
       <Text style={styles.drawerItemText}>NewPlace</Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-      style={styles.drawerItem}
-      onPress={() => navigation.navigate('LocaleScreen')}>
-      <Text style={styles.drawerItemText}>Locale Screen</Text>
     </TouchableOpacity>
     <TouchableOpacity
       style={styles.drawerItem}
@@ -53,36 +44,38 @@ const DrawerContent = ({navigation}) => (
     </TouchableOpacity>
     <TouchableOpacity
       style={styles.drawerItem}
-      onPress={() => navigation.navigate('UserMapView')}>
-      <Text style={styles.drawerItemText}>User Map View</Text>
+      onPress={() => navigation.navigate('userlocation')}>
+      <Text style={styles.drawerItemText}>User Locations</Text>
     </TouchableOpacity>
-    {/* <TouchableOpacity
-      style={styles.drawerItem}
-      onPress={() => navigation.navigate('userplaces')}>
-      <Text style={styles.drawerItemText}>Place</Text>
-    </TouchableOpacity> */}
     <TouchableOpacity
       style={styles.drawerItem}
       onPress={() => navigation.navigate('UserProfile')}>
       <Text style={styles.drawerItemText}>UserProfile</Text>
     </TouchableOpacity>
-  </View>
+
+    {/* Add the Locale Screen button */}
+    <TouchableOpacity
+      style={styles.localeButton}
+      onPress={() => navigation.navigate('LocaleScreen')}>
+      <Text style={styles.localeButtonText}>Lang</Text>
+    </TouchableOpacity>
+  </ScrollView>
 );
 
 const DrawerNavigation = () => {
-  const {i18n} = useLocale(); // Use the custom hook to get the i18n object
+  const {i18n} = useLocale();
+  const handleLogout = useLogout();
 
   return (
     <Drawer.Navigator
       drawerStyle={styles.drawer}
       contentContainerStyle={styles.contentContainer}
       drawerContent={props => <DrawerContent {...props} />}>
-      <Drawer.Screen name="Dashboard" component={DashBoardScreen} />
       <Drawer.Screen name="LocaleScreen" component={LocaleScreen} />
       <Drawer.Screen name="FavouritePlaces" component={FavouritePlace} />
       <Drawer.Screen name="Newplace" component={NewPlaceScreen} />
       <Drawer.Screen name="UserList" component={userListScreen} />
-      <Drawer.Screen name="UserMapView" component={UserMapView} />
+      <Drawer.Screen name="userlocation" component={UserLocation} />
       <Drawer.Screen name="UserProfile" component={UserProfile} />
 
       <Drawer.Screen name="userplaces" component={UserPlacesScreen} />
@@ -128,5 +121,21 @@ const styles = StyleSheet.create({
   drawerItemText: {
     fontSize: 18,
     color: '#333',
+  },
+  localeButton: {
+    position: 'absolute',
+    bottom: 20, // Adjust the bottom position as needed
+    left: 20, // Adjust the left position as needed
+    paddingVertical: 12,
+    backgroundColor: '#007AFF', // Adjust the color as needed
+    alignItems: 'center',
+    borderRadius: 50, // Make it a circle
+    width: 50, // Adjust the width and height for a circle
+    height: 50,
+  },
+  localeButtonText: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
