@@ -64,10 +64,21 @@ const UserPlacesScreen = ({route, navigation}) => {
                 <View style={styles.placeInfo}>
                   <Text style={styles.placeName}>{item.placeName}</Text>
                 </View>
-                <Image
-                  source={require('/Users/santhiyavelusamy/Documents/ReactNative/FinalProject/src/assets/images/map.png')}
-                  style={styles.mapIcon}
-                />
+                <TouchableHighlight
+                  underlayColor="transparent"
+                  onPress={() =>
+                    navigation.navigate('Dashboard', {
+                      hideSearch: true,
+                      latitude: item.latitude,
+                      longitude: item.longitude,
+                      placeName: item.placeName,
+                    })
+                  }>
+                  <Image
+                    source={require('../../assets/images/map.png')}
+                    style={styles.mapIcon}
+                  />
+                </TouchableHighlight>
               </View>
             </TouchableOpacity>
             <Text style={styles.placeDetails}>
