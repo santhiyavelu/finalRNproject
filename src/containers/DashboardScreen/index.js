@@ -1,11 +1,11 @@
 import React, {useCallback, useRef} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
-import MapScreen from '../MapScreen/MapScreen';
+import MapScreen from '../MapScreen';
 import {useDispatch} from 'react-redux';
 import {logOut} from '../../feature/userSlice/UserSlice';
 
 const DashboardScreen = ({navigation, route}) => {
-  const mapRef = useRef(null); // Define mapRef
+  const mapRef = useRef(null);
   const dispatch = useDispatch();
 
   const getInitialLocation = () => {
@@ -29,9 +29,8 @@ const DashboardScreen = ({navigation, route}) => {
         initialLocation={getInitialLocation()}
         mapRef={mapRef}
         routeParams={route.params}
-        style={styles.map} // Apply styles to the MapScreen component
+        style={styles.map}
       />
-      {/* Logout button */}
       <TouchableOpacity
         onPress={() => {
           dispatch(logOut()); // Dispatch the logOut action

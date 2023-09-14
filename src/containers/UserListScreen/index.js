@@ -36,7 +36,6 @@ const UserListScreen = ({navigation}) => {
   }, []);
 
   const navigateToUserPlaces = userId => {
-    // Navigate to a new screen with the user's list of places
     navigation.navigate('userplaces', {userId});
   };
 

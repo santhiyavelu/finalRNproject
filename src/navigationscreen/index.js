@@ -23,7 +23,7 @@ const NavigationScreen = () => {
   const getMainStack = () => {
     return (
       <Stack.Group>
-        <Stack.Screen name="Home" component={DrawerNavigation} />
+        <Stack.Screen name="DashBoard" component={DrawerNavigation} />
         <Stack.Screen name="userplaces" component={UserPlacesScreen} />
       </Stack.Group>
     );
