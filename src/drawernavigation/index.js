@@ -12,6 +12,7 @@ import {
   UserMapView,
 } from '../containers';
 import useLocale from '../helpers/LocalizationHelper';
+import NewPlaceScreen from '../containers/NewPlace';
 
 const Drawer = createDrawerNavigator();
 
@@ -31,6 +32,11 @@ const DrawerContent = ({navigation}) => (
     </TouchableOpacity>
     <TouchableOpacity
       style={styles.drawerItem}
+      onPress={() => navigation.navigate('Newplace')}>
+      <Text style={styles.drawerItemText}>NewPlace</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={styles.drawerItem}
       onPress={() => navigation.navigate('LocaleScreen')}>
       <Text style={styles.drawerItemText}>Locale Screen</Text>
     </TouchableOpacity>
@@ -39,11 +45,6 @@ const DrawerContent = ({navigation}) => (
       onPress={() => navigation.navigate('FavouritePlaces')}>
       <Text style={styles.drawerItemText}>Favourite Places</Text>
     </TouchableOpacity>
-    {/* <TouchableOpacity
-      style={styles.drawerItem}
-      onPress={() => navigation.navigate('UpdatePositionScreen')}>
-      <Text style={styles.drawerItemText}>Update Position</Text>
-    </TouchableOpacity> */}
     <TouchableOpacity
       style={styles.drawerItem}
       onPress={() => navigation.navigate('UserList')}>
@@ -53,6 +54,11 @@ const DrawerContent = ({navigation}) => (
       style={styles.drawerItem}
       onPress={() => navigation.navigate('UserMapView')}>
       <Text style={styles.drawerItemText}>User Map View</Text>
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={styles.drawerItem}
+      onPress={() => navigation.navigate('userplaces')}>
+      <Text style={styles.drawerItemText}>Place</Text>
     </TouchableOpacity>
   </View>
 );
@@ -65,49 +71,14 @@ const DrawerNavigation = () => {
       drawerStyle={styles.drawer}
       contentContainerStyle={styles.contentContainer}
       drawerContent={props => <DrawerContent {...props} />}>
-      <Drawer.Screen
-        name="Dashboard"
-        component={DashBoardScreen}
-        options={{
-          headerShown: true,
-        }}
-      />
-      <Drawer.Screen
-        name="LocaleScreen"
-        component={LocaleScreen}
-        options={{
-          headerShown: true,
-          headerTitle: i18n.t('dashboard'),
-        }}
-      />
-      <Drawer.Screen
-        name="FavouritePlaces"
-        component={FavouritePlace}
-        options={{
-          headerShown: true,
-        }}
-      />
-      {/* <Drawer.Screen
-        name="UpdatePositionScreen"
-        component={UpdatePositionScreen}
-        options={{
-          headerShown: true,
-        }}
-      /> */}
-      <Drawer.Screen
-        name="UserList"
-        component={userListScreen}
-        options={{
-          headerShown: true,
-        }}
-      />
-      <Drawer.Screen
-        name="UserMapView"
-        component={UserMapView}
-        options={{
-          headerShown: true,
-        }}
-      />
+      <Drawer.Screen name="Dashboard" component={DashBoardScreen} />
+      <Drawer.Screen name="LocaleScreen" component={LocaleScreen} />
+      <Drawer.Screen name="FavouritePlaces" component={FavouritePlace} />
+      <Drawer.Screen name="Newplace" component={NewPlaceScreen} />
+      <Drawer.Screen name="UserList" component={userListScreen} />
+      <Drawer.Screen name="UserMapView" component={UserMapView} />
+
+      <Drawer.Screen name="userplaces" component={UserPlacesScreen} />
     </Drawer.Navigator>
   );
 };

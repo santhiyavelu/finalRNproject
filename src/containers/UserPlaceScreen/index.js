@@ -53,7 +53,7 @@ const UserPlacesScreen = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.placeButton}
               onPress={() =>
-                navigation.navigate('Dashboard', {
+                navigation.navigate('Newplace', {
                   hideSearch: true,
                   latitude: item.latitude,
                   longitude: item.longitude,
@@ -64,21 +64,10 @@ const UserPlacesScreen = ({route, navigation}) => {
                 <View style={styles.placeInfo}>
                   <Text style={styles.placeName}>{item.placeName}</Text>
                 </View>
-                <TouchableHighlight
-                  underlayColor="transparent"
-                  onPress={() =>
-                    navigation.navigate('Dashboard', {
-                      hideSearch: true,
-                      latitude: item.latitude,
-                      longitude: item.longitude,
-                      placeName: item.placeName,
-                    })
-                  }>
-                  <Image
-                    source={require('/Users/santhiyavelusamy/Documents/ReactNative/FinalProject/src/assets/images/map.png')}
-                    style={styles.mapIcon}
-                  />
-                </TouchableHighlight>
+                <Image
+                  source={require('/Users/santhiyavelusamy/Documents/ReactNative/FinalProject/src/assets/images/map.png')}
+                  style={styles.mapIcon}
+                />
               </View>
             </TouchableOpacity>
             <Text style={styles.placeDetails}>

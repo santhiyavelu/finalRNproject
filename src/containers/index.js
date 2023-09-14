@@ -3,7 +3,7 @@ import LoginScreen from './LoginScreen';
 import DashBoardScreen from './DashboardScreen';
 import LocaleScreen from './LocaleScreen';
 import FavouritePlace from './FavouritePlace';
-import MapScreen from './MapScreen';
+import MapScreen from './NewPlace';
 import userListScreen from './UserListScreen';
 import UserPlacesScreen from './UserPlaceScreen';
 import UpdatePositionScreen from './UpdatePositionScreen';

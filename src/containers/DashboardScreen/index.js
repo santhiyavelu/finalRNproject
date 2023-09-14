@@ -1,6 +1,6 @@
 import React, {useCallback, useRef} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
-import MapScreen from '../MapScreen';
+import MapScreen from '../NewPlace';
 import {useDispatch} from 'react-redux';
 import {logOut} from '../../feature/userSlice/UserSlice';
 
@@ -8,29 +8,8 @@ const DashboardScreen = ({navigation, route}) => {
   const mapRef = useRef(null);
   const dispatch = useDispatch();
 
-  const getInitialLocation = () => {
-    if (route.params && route.params.latitude && route.params.longitude) {
-      return {
-        latitude: parseFloat(route.params.latitude), // Parse as float
-        longitude: parseFloat(route.params.longitude),
-      };
-    }
-    // If route.params is not available, use default coordinates
-    return {
-      latitude: 37.78825, // Default latitude
-      longitude: -122.4324, // Default longitude
-    };
-  };
-
   return (
     <View style={styles.container}>
-      {/* MapScreen */}
-      <MapScreen
-        initialLocation={getInitialLocation()}
-        mapRef={mapRef}
-        routeParams={route.params}
-        style={styles.map}
-      />
       <TouchableOpacity
         onPress={() => {
           dispatch(logOut()); // Dispatch the logOut action
@@ -45,7 +24,7 @@ const DashboardScreen = ({navigation, route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between', // Arrange items vertically with space in-between
+    justifyContent: 'space-between',
   },
   map: {
     flex: 1, // Make the MapScreen take up all available space
