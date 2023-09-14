@@ -10,6 +10,7 @@ import MapControl from '../../controls/Mapcontrol';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {useSelector} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
+import styles from './styles';
 
 const placeCollection = firestore().collection('UserMyPlaces');
 
@@ -85,33 +86,29 @@ const NewPlaceScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <GooglePlacesAutocomplete
-          placeholder="Search"
-          fetchDetails={true}
-          onPress={(data, details = null) => {
-            handleSearch(details);
-            setSearchText(data.description);
-          }}
-          query={{
-            key: 'AIzaSyCoO6U745TXpW0izoMKg3fActvqTFHsu5M', // Replace with your Google Maps API key
-            language: 'en',
-          }}
-          styles={{
-            textInputContainer: styles.textInputContainer,
-            textInput: styles.textInput,
-            predefinedPlacesDescription: styles.predefinedPlacesDescription,
-            listView: styles.listView,
-          }}
-        />
-      </View>
+      {/* Search Box */}
+      <GooglePlacesAutocomplete
+        placeholder="Search"
+        fetchDetails={true}
+        onPress={(data, details = null) => {
+          handleSearch(details);
+          setSearchText(data.description);
+        }}
+        query={{
+          key: 'AIzaSyCoO6U745TXpW0izoMKg3fActvqTFHsu5M', // Replace with your Google Maps API key
+          language: 'en',
+        }}
+        styles={searchBoxStyles}
+      />
 
+      {/* Map View */}
       <MapControl
         onMapReady={() => setIsMapReady(true)}
         ref={parentControlMapRef}
         style={styles.map}
       />
 
+      {/* Add Place Button */}
       <TouchableOpacity style={styles.addPlaceButton} onPress={handleAddPlace}>
         <Text style={styles.addPlaceButtonText}>Add Place</Text>
       </TouchableOpacity>
@@ -119,59 +116,14 @@ const NewPlaceScreen = ({navigation, route}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8F8F8',
-  },
-  searchContainer: {
-    zIndex: 2, // Set a higher zIndex for the search container
-    elevation: 3,
-    // backgroundColor: 'white',
-    // padding: 16,
-    borderRadius: 8,
-    // marginBottom: 16,
-    // marginHorizontal: 16,
-  },
-  textInputContainer: {
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-  },
-  textInput: {
-    marginLeft: 0,
-    marginRight: 0,
-    height: 48,
-    color: '#5d5d5d',
-    fontSize: 16,
-  },
-  predefinedPlacesDescription: {
-    color: '#1faadb',
-  },
-  listView: {
-    zIndex: 3, // Set a higher zIndex for the drop-down list
-    maxHeight: 200, // Limit the drop-down list height
-  },
-  map: {
-    flex: 1,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 8,
-    overflow: 'hidden',
-    // margin: 16,
-  },
-  addPlaceButton: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignSelf: 'center',
-  },
-  addPlaceButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-});
-
 export default NewPlaceScreen;
+const searchBoxStyles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+  },
+  // Add styles for the search box as needed
+});

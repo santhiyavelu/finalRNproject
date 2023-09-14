@@ -8,6 +8,7 @@ import userListScreen from './UserListScreen';
 import UserPlacesScreen from './UserPlaceScreen';
 import UpdatePositionScreen from './UpdatePositionScreen';
 import UserMapView from './UsersMapView';
+import UserProfile from './UserProfile';
 
 export {
   SignUpScreen,
@@ -20,4 +21,5 @@ export {
   UserPlacesScreen,
   UpdatePositionScreen,
   UserMapView,
+  UserProfile,
 };

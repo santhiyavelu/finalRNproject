@@ -10,6 +10,7 @@ import {
   MapScreen,
   UpdatePositionScreen,
   UserMapView,
+  UserProfile,
 } from '../containers';
 import useLocale from '../helpers/LocalizationHelper';
 import NewPlaceScreen from '../containers/NewPlace';
@@ -55,10 +56,15 @@ const DrawerContent = ({navigation}) => (
       onPress={() => navigation.navigate('UserMapView')}>
       <Text style={styles.drawerItemText}>User Map View</Text>
     </TouchableOpacity>
-    <TouchableOpacity
+    {/* <TouchableOpacity
       style={styles.drawerItem}
       onPress={() => navigation.navigate('userplaces')}>
       <Text style={styles.drawerItemText}>Place</Text>
+    </TouchableOpacity> */}
+    <TouchableOpacity
+      style={styles.drawerItem}
+      onPress={() => navigation.navigate('UserProfile')}>
+      <Text style={styles.drawerItemText}>UserProfile</Text>
     </TouchableOpacity>
   </View>
 );
@@ -77,6 +83,7 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="Newplace" component={NewPlaceScreen} />
       <Drawer.Screen name="UserList" component={userListScreen} />
       <Drawer.Screen name="UserMapView" component={UserMapView} />
+      <Drawer.Screen name="UserProfile" component={UserProfile} />
 
       <Drawer.Screen name="userplaces" component={UserPlacesScreen} />
     </Drawer.Navigator>
