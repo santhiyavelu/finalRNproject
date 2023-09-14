@@ -1,19 +1,6 @@
 import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-
-const MARKERS = [
-  {
-    coordinates: {latitude: 0, longitude: 0},
-    title: 'middle',
-    description: 'middle of earth',
-  },
-  {
-    coordinates: {latitude: 0.5, longitude: 0.5},
-    title: 'middle',
-    description: 'middle of earth',
-  },
-];
 
 const Map = forwardRef((props, ref) => {
   const mapViewRef = useRef(null);
@@ -25,9 +12,9 @@ const Map = forwardRef((props, ref) => {
       setCoords({latitude: region.latitude, longitude: region.longitude});
     },
   }));
-
   const renderMarkers = () => {
     if (props.markers?.length) {
+      console.log(props.markers, 'markerssss');
       return props.markers.map((marker, idx) => {
         return (
           <Marker
@@ -35,8 +22,17 @@ const Map = forwardRef((props, ref) => {
             key={idx}
             coordinate={marker.coordinates}
             title={marker.title}
-            description={marker.description}
-          />
+            description={marker.description}>
+            <View
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                backgroundColor: 'red',
+              }}>
+              <Text>{marker.title}</Text>
+            </View>
+          </Marker>
         );
       });
     } else {
@@ -57,8 +53,8 @@ const Map = forwardRef((props, ref) => {
       showsMyLocationButton
       showsUserLocation
       initialRegion={{
-        latitude: 37.78825,
-        longitude: -122.4324,
+        latitude: 37.54940083,
+        longitude: -122.37414932,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}>

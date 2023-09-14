@@ -67,7 +67,7 @@ const UserPlacesScreen = ({route, navigation}) => {
                 <TouchableHighlight
                   underlayColor="transparent"
                   onPress={() =>
-                    navigation.navigate('Dashboard', {
+                    navigation.navigate('Newplace', {
                       hideSearch: true,
                       latitude: item.latitude,
                       longitude: item.longitude,
@@ -75,7 +75,7 @@ const UserPlacesScreen = ({route, navigation}) => {
                     })
                   }>
                   <Image
-                    source={require('../../assets/images/map.png')}
+                    source={require('/Users/santhiyavelusamy/Documents/ReactNative/FinalProject/src/assets/images/map.png')}
                     style={styles.mapIcon}
                   />
                 </TouchableHighlight>

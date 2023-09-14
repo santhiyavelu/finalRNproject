@@ -27,16 +27,15 @@ const UserMapView = () => {
         setUserPlaces(places);
 
         // Create markers based on user places
-        const newMarkers = places.map((place, index) => ({
-          id: index.toString(),
+        const markersData = places.map(place => ({
           coordinate: {
-            latitude: place.latitude,
-            longitude: place.longitude,
+            latitude: place.currentLatitude,
+            longitude: place.currentLongitude,
           },
-          title: place.userName,
+          title: place.author,
         }));
 
-        setMarkers(newMarkers);
+        setMarkers(markersData);
       } catch (error) {
         console.error('Error fetching user places:', error);
       }
@@ -61,19 +60,11 @@ const UserMapView = () => {
         ref={parentControlMapRef}
         markers={markers}
       />
-      {markers.map(marker => {
-        return (
-          <Marker
-            key={marker.id}
-            coordinate={marker.coordinate}
-            title={marker.title}
-            onPress={() => animateToRegion(marker.coordinate)}>
-            <View style={styles.marker}>
-              <Text style={styles.markerText}>{marker.title}</Text>
-            </View>
-          </Marker>
-        );
-      })}
+      {markers.map(marker => (
+        <TouchableOpacity onPress={() => animateToRegion(marker.coordinate)}>
+          <Text>{marker.title}</Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
