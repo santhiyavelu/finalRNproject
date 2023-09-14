@@ -31,7 +31,7 @@ const NewPlaceScreen = ({navigation, route}) => {
         longitudeDelta: 0.0121,
       });
     }
-  }, [coords]);
+  }, [isMapReady, coords]);
 
   useEffect(() => {
     if (isMapReady && params?.latitude && params?.longitude) {

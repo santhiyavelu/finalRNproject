@@ -3,6 +3,7 @@ import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import firestore from '@react-native-firebase/firestore';
 import MapControl from '../../controls/Mapcontrol';
+import styles from './style';
 
 const UserLocation = () => {
   const [markers, setMarkers] = useState([]);
@@ -55,39 +56,25 @@ const UserLocation = () => {
 
   return (
     <View style={styles.container}>
-      <MapControl
-        onMapReady={() => setIsMapReady(true)}
-        ref={parentControlMapRef}
-        markers={markers}
-      />
-      {markers.map(marker => (
-        <TouchableOpacity onPress={() => animateToRegion(marker.coordinate)}>
-          <Text>{marker.title}</Text>
-        </TouchableOpacity>
-      ))}
+      <View style={styles.mapContainer}>
+        <MapControl
+          onMapReady={() => setIsMapReady(true)}
+          ref={parentControlMapRef}
+          markers={markers}
+        />
+      </View>
+      <View style={styles.markerContainer}>
+        {markers.map(marker => (
+          <TouchableOpacity
+            key={marker.title}
+            style={styles.button}
+            onPress={() => animateToRegion(marker.coordinate)}>
+            <Text style={styles.buttonText}>{marker.title}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 };
 
 export default UserLocation;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    flex: 1,
-  },
-  marker: {
-    width: 40,
-    height: 40,
-    borderRadius: 40,
-    backgroundColor: 'blue', // Change marker color as needed
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  markerText: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-});

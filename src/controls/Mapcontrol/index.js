@@ -1,6 +1,7 @@
 import React, {forwardRef, useImperativeHandle, useRef, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View, Text} from 'react-native';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import styles from './style';
 
 const Map = forwardRef((props, ref) => {
   const mapViewRef = useRef(null);
@@ -12,6 +13,7 @@ const Map = forwardRef((props, ref) => {
       setCoords({latitude: region.latitude, longitude: region.longitude});
     },
   }));
+
   const renderMarkers = () => {
     if (props.markers?.length) {
       console.log(props.markers, 'markerfromuserlocation');
@@ -20,17 +22,15 @@ const Map = forwardRef((props, ref) => {
           <Marker
             draggable
             key={idx}
-            coordinate={marker.coordinates}
+            coordinate={marker.coordinate}
             title={marker.title}
             description={marker.description}>
-            <View
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                backgroundColor: 'red',
-              }}>
-              <Text>{marker.title}</Text>
+            {/* Custom marker view */}
+            <View style={styles.markerContainer}>
+              {/* Set the borderRadius to make it a circle */}
+              <View style={styles.circle}>
+                <Text style={styles.markerText}>{marker.title}</Text>
+              </View>
             </View>
           </Marker>
         );
@@ -61,12 +61,6 @@ const Map = forwardRef((props, ref) => {
       {renderMarkers()}
     </MapView>
   );
-});
-
-const styles = StyleSheet.create({
-  mapView: {
-    flex: 1,
-  },
 });
 
 export default Map;
