@@ -75,7 +75,7 @@ const UserPlacesScreen = ({route, navigation}) => {
                     })
                   }>
                   <Image
-                    source={require('/Users/santhiyavelusamy/Documents/ReactNative/FinalProject/src/assets/images/map.png')}
+                    source={require('../../assets/images/map.png')}
                     style={styles.mapIcon}
                   />
                 </TouchableHighlight>
