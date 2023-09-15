@@ -25,9 +25,8 @@ const UserProfile = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [selectedColor, setSelectedColor] = useState('#000000');
+  const [selectedColor, setSelectedColor] = useState('');
   const uid = useSelector(state => state.user?.user?.uid);
-  const [documentId, setDocumentId] = useState('');
   const dispatch = useDispatch();
 
   const onSelectColor = ({hex}) => {
@@ -36,47 +35,41 @@ const UserProfile = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (uid) {
-      const fetchDocumentId = async () => {
-        try {
-          const querySnapshot = await firestore()
-            .collection('UsersPosition')
-            .where('userId', '==', uid)
-            .get();
-
-          if (!querySnapshot.empty) {
-            const document = querySnapshot.docs[0];
-            setDocumentId(document.id);
-          }
-        } catch (error) {
-          console.error('Error fetching user document:', error);
+    // Retrieve user information from Firestore based on uid
+    const unsubscribe = firestore()
+      .collection('UsersPosition')
+      .doc(uid)
+      .onSnapshot(doc => {
+        if (doc.exists) {
+          const userData = doc.data();
+          setFirstName(userData.firstName);
+          setLastName(userData.lastName);
+          setSelectedColor(userData.userColor);
         }
-      };
-
-      fetchDocumentId();
-    }
-  }, [uid]);
-
-  const handleUpdate = async () => {
-    try {
-      if (!documentId) {
-        console.error('No document ID available for update.');
-        return;
-      }
-
-      await firestore().collection('UsersPosition').doc(documentId).update({
-        firstName,
-        lastName,
-        userColor: selectedColor,
       });
 
-      setFirstName('');
-      setLastName('');
-      setSelectedColor('#000000');
-      setDocumentId('');
-    } catch (error) {
-      console.error('Error updating data in Firestore:', error);
-    }
+    return () => {
+      // Unsubscribe from Firestore when the component unmounts
+      unsubscribe();
+    };
+  }, [uid]);
+
+  const handleUpdate = () => {
+    // Update user information in Firestore
+    firestore()
+      .collection('UsersPosition')
+      .doc(uid)
+      .update({
+        firstName,
+        lastName,
+        selectedColor,
+      })
+      .then(() => {
+        console.log('User information updated successfully');
+      })
+      .catch(error => {
+        console.error('Error updating user information', error);
+      });
   };
 
   return (
@@ -100,7 +93,7 @@ const UserProfile = ({navigation}) => {
 
       <Modal visible={showModal} animationType="slide">
         <ColorPicker
-          style={{width: '70%'}}
+          style={{width: '100%', marginTop: 150}}
           value="red"
           onComplete={onSelectColor}>
           <Preview />

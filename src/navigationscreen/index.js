@@ -23,7 +23,11 @@ const NavigationScreen = () => {
   const getMainStack = () => {
     return (
       <Stack.Group>
-        <Stack.Screen name="DashBoard" component={DrawerNavigation} />
+        <Stack.Screen
+          name="DashBoard"
+          component={DrawerNavigation}
+          options={{headerShown: false}}
+        />
       </Stack.Group>
     );
   };
