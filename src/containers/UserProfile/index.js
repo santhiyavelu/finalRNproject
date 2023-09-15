@@ -67,7 +67,7 @@ const UserProfile = ({navigation}) => {
       await firestore().collection('UsersPosition').doc(documentId).update({
         firstName,
         lastName,
-        color: selectedColor,
+        userColor: selectedColor,
       });
 
       setFirstName('');

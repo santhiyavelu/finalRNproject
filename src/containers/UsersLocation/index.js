@@ -33,6 +33,7 @@ const UserLocation = () => {
             latitude: place.currentLatitude,
             longitude: place.currentLongitude,
           },
+          color: place.userColor,
           title: place.author,
         }));
 

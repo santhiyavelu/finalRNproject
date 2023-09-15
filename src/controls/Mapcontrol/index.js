@@ -28,7 +28,11 @@ const Map = forwardRef((props, ref) => {
             {/* Custom marker view */}
             <View style={styles.markerContainer}>
               {/* Set the borderRadius to make it a circle */}
-              <View style={styles.circle}>
+              <View
+                style={[
+                  styles.circle,
+                  {backgroundColor: marker.color}, // Set the background color based on marker.color
+                ]}>
                 <Text style={styles.markerText}>{marker.title}</Text>
               </View>
             </View>
