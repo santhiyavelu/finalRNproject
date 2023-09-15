@@ -10,22 +10,16 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   userItem: {
-    marginBottom: 8,
-    padding: 16,
-    backgroundColor: '#F4F4F4',
-    borderRadius: 8,
+    marginBottom: 16,
   },
   userText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    flexDirection: 'row', // Arrange text horizontally
+    fontSize: 16,
+    color: '#333', // Adjust the color to your preference
   },
   clickableUserId: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'blue', // Make the user ID text appear as a link
-    textDecorationLine: 'underline', // Underline the user ID text
-    marginLeft: 4, // Add a little spacing between user name and user ID
+    textDecorationLine: 'underline',
+    fontStyle: 'italic',
+    color: 'blue', // Adjust the color to your preference
   },
 });
 

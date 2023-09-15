@@ -37,6 +37,7 @@
     "react-native-screens": "^3.25.0",
     "react-native-vector-icons": "^10.0.0",
     "react-redux": "^8.1.2",
+    "reanimated-color-picker": "^2.3.4",
     "redux-logger": "^3.0.6",
     "yup": "^1.2.0"
   },

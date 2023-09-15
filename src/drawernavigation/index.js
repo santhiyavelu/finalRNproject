@@ -2,7 +2,6 @@ import React, {useState} from 'react'; // Import useState from React
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {
-  LocaleScreen,
   FavouritePlace,
   userListScreen,
   UserPlacesScreen,
@@ -15,16 +14,23 @@ import {
 import {ScrollView} from 'react-native';
 import useLogout from '../hooks/uselogout';
 import useLocale from '../helpers/LocalizationHelper';
+import {useDispatch, useSelector} from 'react-redux';
+import {logOut} from '../feature/userSlice/UserSlice';
+import {changeLanguage} from '../feature/localeSlice/LocalSlice';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerContent = ({navigation}) => {
   const {i18n, setLocale} = useLocale();
-  const [currentLanguage, setCurrentLanguage] = useState('en'); // Store the current language
+  const dispatch = useDispatch();
+
+  const language = useSelector(state => state.locale.language);
+  const [currentLanguage, setCurrentLanguage] = useState('language'); // Store the current language
 
   const toggleLanguage = () => {
-    const newLanguage = currentLanguage === 'en' ? 'fr' : 'en'; // Toggle between 'en' and 'fr'
+    const newLanguage = currentLanguage === 'fr' ? 'en' : 'fr'; // Toggle between 'en' and 'fr'
     setCurrentLanguage(newLanguage);
+    dispatch(changeLanguage(newLanguage));
     setLocale(newLanguage); // Set the new language using the setLocale function
   };
 
@@ -62,11 +68,9 @@ const DrawerContent = ({navigation}) => {
         onPress={() => navigation.navigate('UserProfile')}>
         <Text style={styles.drawerItemText}>UserProfile</Text>
       </TouchableOpacity>
-
-      {/* Add the Locale Screen button */}
       <TouchableOpacity style={styles.localeButton} onPress={toggleLanguage}>
         <Text style={styles.localeButtonText}>
-          {currentLanguage === 'en' ? 'FR' : 'EN'}
+          {currentLanguage === 'fr' ? 'FR' : 'EN'}
         </Text>
       </TouchableOpacity>
     </ScrollView>
@@ -74,16 +78,13 @@ const DrawerContent = ({navigation}) => {
 };
 
 const DrawerNavigation = () => {
-  const handleLogout = useLogout();
-
   return (
     <Drawer.Navigator
       drawerStyle={styles.drawer}
       contentContainerStyle={styles.contentContainer}
       drawerContent={props => <DrawerContent {...props} />}>
-      <Drawer.Screen name="LocaleScreen" component={LocaleScreen} />
-      <Drawer.Screen name="FavouritePlaces" component={FavouritePlace} />
       <Drawer.Screen name="Newplace" component={NewPlaceScreen} />
+      <Drawer.Screen name="FavouritePlaces" component={FavouritePlace} />
       <Drawer.Screen name="UserList" component={userListScreen} />
       <Drawer.Screen name="userlocation" component={UserLocation} />
       <Drawer.Screen name="UserProfile" component={UserProfile} />
@@ -147,5 +148,24 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     fontWeight: 'bold',
+  },
+  logoutButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20, // Adjust the right position as needed
+    width: 50,
+    height: 50,
+    borderRadius: 25, // Make it a circle
+    backgroundColor: 'red', // Adjust the background color as needed
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5, // Add elevation to make it look like a button
+  },
+
+  // Style for the logout icon (adjust width, height, and other styles)
+  logoutIcon: {
+    width: 30,
+    height: 30,
+    tintColor: 'white', // Adjust the icon color as needed
   },
 });
