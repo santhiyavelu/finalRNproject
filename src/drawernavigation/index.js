@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react'; // Import useState from React
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {
@@ -12,58 +12,68 @@ import {
   UserProfile,
   NewPlaceScreen,
 } from '../containers';
-import useLocale from '../helpers/LocalizationHelper';
 import {ScrollView} from 'react-native';
 import useLogout from '../hooks/uselogout';
+import useLocale from '../helpers/LocalizationHelper';
 
 const Drawer = createDrawerNavigator();
 
-const DrawerContent = ({navigation}) => (
-  <ScrollView contentContainerStyle={styles.drawerContent}>
-    <View style={styles.drawerHeader}>
-      <Image
-        source={require('../assets/images/draw.png')}
-        style={styles.drawerLogo}
-      />
-      <Text style={styles.drawerHeaderText}>My App</Text>
-    </View>
-    <TouchableOpacity
-      style={styles.drawerItem}
-      onPress={() => navigation.navigate('Newplace')}>
-      <Text style={styles.drawerItemText}>NewPlace</Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-      style={styles.drawerItem}
-      onPress={() => navigation.navigate('FavouritePlaces')}>
-      <Text style={styles.drawerItemText}>Favourite Places</Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-      style={styles.drawerItem}
-      onPress={() => navigation.navigate('UserList')}>
-      <Text style={styles.drawerItemText}>User List</Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-      style={styles.drawerItem}
-      onPress={() => navigation.navigate('userlocation')}>
-      <Text style={styles.drawerItemText}>User Locations</Text>
-    </TouchableOpacity>
-    <TouchableOpacity
-      style={styles.drawerItem}
-      onPress={() => navigation.navigate('UserProfile')}>
-      <Text style={styles.drawerItemText}>UserProfile</Text>
-    </TouchableOpacity>
+const DrawerContent = ({navigation}) => {
+  const {i18n, setLocale} = useLocale();
+  const [currentLanguage, setCurrentLanguage] = useState('en'); // Store the current language
 
-    {/* Add the Locale Screen button */}
-    <TouchableOpacity
-      style={styles.localeButton}
-      onPress={() => navigation.navigate('LocaleScreen')}>
-      <Text style={styles.localeButtonText}>Lang</Text>
-    </TouchableOpacity>
-  </ScrollView>
-);
+  const toggleLanguage = () => {
+    const newLanguage = currentLanguage === 'en' ? 'fr' : 'en'; // Toggle between 'en' and 'fr'
+    setCurrentLanguage(newLanguage);
+    setLocale(newLanguage); // Set the new language using the setLocale function
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.drawerContent}>
+      <View style={styles.drawerHeader}>
+        <Image
+          source={require('../assets/images/draw.png')}
+          style={styles.drawerLogo}
+        />
+        <Text style={styles.drawerHeaderText}>{i18n.t('hello')}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.drawerItem}
+        onPress={() => navigation.navigate('Newplace')}>
+        <Text style={styles.drawerItemText}>{i18n.t('NewPlace')}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.drawerItem}
+        onPress={() => navigation.navigate('FavouritePlaces')}>
+        <Text style={styles.drawerItemText}>Favourite Places</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.drawerItem}
+        onPress={() => navigation.navigate('UserList')}>
+        <Text style={styles.drawerItemText}>User List</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.drawerItem}
+        onPress={() => navigation.navigate('userlocation')}>
+        <Text style={styles.drawerItemText}>User Locations</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.drawerItem}
+        onPress={() => navigation.navigate('UserProfile')}>
+        <Text style={styles.drawerItemText}>UserProfile</Text>
+      </TouchableOpacity>
+
+      {/* Add the Locale Screen button */}
+      <TouchableOpacity style={styles.localeButton} onPress={toggleLanguage}>
+        <Text style={styles.localeButtonText}>
+          {currentLanguage === 'en' ? 'FR' : 'EN'}
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+};
 
 const DrawerNavigation = () => {
-  const {i18n} = useLocale();
   const handleLogout = useLogout();
 
   return (

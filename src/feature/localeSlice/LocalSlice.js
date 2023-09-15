@@ -6,6 +6,7 @@ export const localeSlice = createSlice({
   reducers: {
     changeLanguage: (state, action) => {
       state.language = action.payload;
+      console.log(state.language, 'slice');
     },
   },
 });

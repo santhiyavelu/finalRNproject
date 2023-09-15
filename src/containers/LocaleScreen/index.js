@@ -8,8 +8,8 @@ const LocaleScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{i18n.t('hello')}</Text>
-      <Text style={styles.subtitle}>{i18n.t('testLocale')}</Text>
+      {/* <Text style={styles.title}>{i18n.t('hello')}</Text>
+      <Text style={styles.subtitle}>{i18n.t('testLocale')}</Text> */}
 
       <TouchableOpacity
         style={styles.button}
