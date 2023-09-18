@@ -10,12 +10,13 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import ActionSheet from 'react-native-action-sheet';
 import {UserLocation} from '../containers';
 import MapView, {Marker} from 'react-native-maps';
 import firestore from '@react-native-firebase/firestore';
 import styles from './styles';
+import {addMessage, receiveMessage} from '../feature/messageSlice/messageSlice';
 
 const ChatScreen = () => {
   const uid = useSelector(state => state.user?.user?.uid);
@@ -32,18 +33,16 @@ const ChatScreen = () => {
         <View style={styles.chatContainer}>
           <Chat selectedUuid={uid} />
         </View>
-        {/* <View style={styles.mapContainer}>
-          <UserLocation />
-        </View> */}
       </View>
     </PubNubProvider>
   );
 };
 
 function Chat({selectedUuid}) {
+  const dispatch = useDispatch();
   const pubnub = usePubNub();
   const [channels] = useState(['ITC', 'jnFQnezZSLUbDuj7WhJQDab6J6E2']);
-  const [messages, addMessage] = useState([]);
+  const [messages, setaddMessage] = useState([]);
   const [message, setMessage] = useState('');
   const [allUserIds, setAllUserIds] = useState([]);
   const [selectedUserChannel, setselectedUserChannel] = useState('');
@@ -103,9 +102,11 @@ function Chat({selectedUuid}) {
     if (typeof message === 'string' || message.hasOwnProperty('text')) {
       const text = message.text || message;
       const newMessage = {sender: event.publisher, text: text};
-      addMessage(messages => [...messages, newMessage]);
+      setaddMessage(messages => [...messages, newMessage]);
+
       if (event.publisher == selectedUuid) {
         console.log('New message from', event.publisher, ':', text);
+        dispatch(receiveMessage(newMessage));
         // Handle messages from others here
       }
     }
@@ -117,13 +118,14 @@ function Chat({selectedUuid}) {
       pubnub
         .publish({channel: selectedUserChannel, message})
         .then(() => setMessage(''));
+      dispatch(addMessage({sender: 'You', text: message}));
     }
   };
 
   useEffect(() => {
     pubnub.addListener({message: handleMessage});
     pubnub.subscribe({channels});
-  }, [pubnub, channels, handleMessage, messages]);
+  }, [pubnub, channels]);
 
   return (
     <View style={styles.chatScreen}>
@@ -161,7 +163,7 @@ function Chat({selectedUuid}) {
         renderItem={({item, index}) => (
           <View style={styles.messageItem}>
             <Text style={styles.senderName}>{selectedUuid}:</Text>
-            <Text style={styles.messageText}>{item}</Text>
+            <Text style={styles.messageText}>{item.text}</Text>
           </View>
         )}
         inverted={true}
