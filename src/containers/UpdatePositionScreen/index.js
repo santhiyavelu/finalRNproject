@@ -51,6 +51,13 @@ const UpdatePositionScreen = () => {
           userName: author,
         });
 
+        // update the position
+        firestore().collection('UsersPosition').doc(userId).update({
+          currentLatitude: latitude,
+          currentLongitude: longitude,
+          locationTime: locationObject.timestamp,
+        });
+
         console.log('Position updated successfully:', latitude, longitude);
       } catch (error) {
         console.error('Error updating position:', error);

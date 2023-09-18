@@ -9,6 +9,7 @@ import UpdatePositionScreen from './UpdatePositionScreen';
 import UserLocation from './UsersLocation';
 import UserProfile from './UserProfile';
 import NewPlaceScreen from './NewPlace';
+import ChatScreen from '../chatScreeen';
 
 export {
   SignUpScreen,
@@ -22,4 +23,5 @@ export {
   UserLocation,
   UserProfile,
   NewPlaceScreen,
+  ChatScreen,
 };

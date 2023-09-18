@@ -10,6 +10,7 @@ import {
   UserLocation,
   UserProfile,
   NewPlaceScreen,
+  ChatScreen,
 } from '../containers';
 import {ScrollView} from 'react-native';
 import useLogout from '../hooks/uselogout';
@@ -66,7 +67,12 @@ const DrawerContent = ({navigation}) => {
       <TouchableOpacity
         style={styles.drawerItem}
         onPress={() => navigation.navigate('UserProfile')}>
-        <Text style={styles.drawerItemText}>UserProfile</Text>
+        <Text style={styles.drawerItemText}>User Profile</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.drawerItem}
+        onPress={() => navigation.navigate('chatscreen')}>
+        <Text style={styles.drawerItemText}>Chat Screen</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.localeButton} onPress={toggleLanguage}>
         <Text style={styles.localeButtonText}>
@@ -88,8 +94,8 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="UserList" component={userListScreen} />
       <Drawer.Screen name="userlocation" component={UserLocation} />
       <Drawer.Screen name="UserProfile" component={UserProfile} />
-
       <Drawer.Screen name="userplaces" component={UserPlacesScreen} />
+      <Drawer.Screen name="chatscreen" component={ChatScreen} />
     </Drawer.Navigator>
   );
 };
