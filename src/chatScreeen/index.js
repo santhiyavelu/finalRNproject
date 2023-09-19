@@ -41,7 +41,7 @@ const ChatScreen = () => {
 function Chat({selectedUuid}) {
   const dispatch = useDispatch();
   const pubnub = usePubNub();
-  const [channels] = useState(['ITC', 'jnFQnezZSLUbDuj7WhJQDab6J6E2']);
+  const [channels] = useState(['ITC', selectedUuid]);
   const [messages, setaddMessage] = useState([]);
   const [message, setMessage] = useState('');
   const [allUserIds, setAllUserIds] = useState([]);
@@ -98,13 +98,14 @@ function Chat({selectedUuid}) {
   };
 
   const handleMessage = event => {
+    console.log('message trigger');
     const message = event.message;
     if (typeof message === 'string' || message.hasOwnProperty('text')) {
       const text = message.text || message;
       const newMessage = {sender: event.publisher, text: text};
       setaddMessage(messages => [...messages, newMessage]);
 
-      console.log('New message from', event.publisher, ':', text);
+      console.log('New message from receive', event.publisher, ':', text);
       dispatch(receiveMessage(newMessage));
       // Handle messages from others here
     }
@@ -112,18 +113,27 @@ function Chat({selectedUuid}) {
 
   const sendMessage = message => {
     if (message) {
-      console.log(allUserIds, 'alluserIds');
+      console.log(messages, 'sendmessages');
       pubnub
         .publish({channel: selectedUserChannel, message})
-        .then(() => setMessage(''));
-      dispatch(addMessage({sender: 'You', text: message}));
+        .then(() => {
+          setMessage('');
+          dispatch(addMessage({sender: 'You', text: message}));
+        })
+        .catch(error => {
+          console.error('Error publishing message:', error);
+        });
     }
   };
 
   useEffect(() => {
     pubnub.addListener({message: handleMessage});
     pubnub.subscribe({channels});
-  }, [pubnub, channels]);
+
+    return () => {
+      pubnub.removeListener({message: handleMessage});
+    };
+  }, [channels]);
 
   return (
     <View style={styles.chatScreen}>

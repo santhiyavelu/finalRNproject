@@ -26,8 +26,6 @@ const UserLocation = () => {
 
   const messages = useSelector(state => state.message.messages);
 
-  console.log(messages, 'messages');
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -56,7 +54,6 @@ const UserLocation = () => {
         }));
 
         setMarkers(markersData);
-        console.log(markersData, 'markersData');
       } catch (error) {
         console.error('Error fetching user places:', error);
       }
@@ -121,19 +118,19 @@ const UserLocation = () => {
           {/* Header */}
           <View style={styles.modalHeader}>
             <Text style={styles.modalHeaderText}>
-              Messages for {selectedMarker.title}:
+              Messages for {selectedMarker?.title}:
             </Text>
           </View>
 
           {/* Message List */}
           <FlatList
             data={messages.filter(
-              message => message.sender === selectedMarker.userId,
+              message => message.sender === selectedMarker?.userId,
             )}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (
               <View style={styles.messageItem}>
-                <Text style={styles.senderName}>{item.sender}:</Text>
+                <Text style={styles.senderName}>{selectedMarker?.title}:</Text>
                 <Text style={styles.messageText}>{item.text}</Text>
               </View>
             )}
@@ -144,7 +141,7 @@ const UserLocation = () => {
             <Button
               title="Close"
               onPress={() => setModalVisible(false)}
-              color="#FF5733" // You can customize the color
+              color="#FF5733"
             />
           </View>
         </View>
