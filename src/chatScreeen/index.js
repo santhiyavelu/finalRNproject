@@ -104,11 +104,9 @@ function Chat({selectedUuid}) {
       const newMessage = {sender: event.publisher, text: text};
       setaddMessage(messages => [...messages, newMessage]);
 
-      if (event.publisher == selectedUuid) {
-        console.log('New message from', event.publisher, ':', text);
-        dispatch(receiveMessage(newMessage));
-        // Handle messages from others here
-      }
+      console.log('New message from', event.publisher, ':', text);
+      dispatch(receiveMessage(newMessage));
+      // Handle messages from others here
     }
   };
 
@@ -139,36 +137,26 @@ function Chat({selectedUuid}) {
           <Text style={styles.sendButtonText}>Select the Sender</Text>
         </TouchableOpacity>
       </View>
-      <TextInput
-        autoComplete="off"
-        autoCorrect={false}
-        value={message}
-        onChangeText={changedText => {
-          setMessage(changedText);
-        }}
-        placeholder="Write a message"
-        style={styles.messageInput}
-      />
+      <View style={styles.inputContainer}>
+        <TextInput
+          autoComplete="off"
+          autoCorrect={false}
+          value={message}
+          onChangeText={changedText => {
+            setMessage(changedText);
+          }}
+          placeholder="Write a message"
+          style={styles.messageInput}
+        />
 
-      <TouchableOpacity
-        style={styles.sendButton}
-        onPress={() => {
-          sendMessage(message);
-        }}>
-        <Text style={styles.sendButtonText}>Send Message</Text>
-      </TouchableOpacity>
-
-      <FlatList
-        data={messages}
-        renderItem={({item, index}) => (
-          <View style={styles.messageItem}>
-            <Text style={styles.senderName}>{selectedUuid}:</Text>
-            <Text style={styles.messageText}>{item.text}</Text>
-          </View>
-        )}
-        inverted={true}
-        style={styles.messageList}
-      />
+        <TouchableOpacity
+          style={styles.sendButton}
+          onPress={() => {
+            sendMessage(message);
+          }}>
+          <Text style={styles.sendButtonText}>>></Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

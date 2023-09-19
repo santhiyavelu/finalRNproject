@@ -1,10 +1,20 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Image,
+  Modal,
+  Button,
+  FlatList,
+} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import firestore from '@react-native-firebase/firestore';
 import MapControl from '../../controls/Mapcontrol';
 import styles from './style';
 import {useSelector} from 'react-redux';
+import ChatScreen from '../../chatScreeen';
 
 const UserLocation = () => {
   const [markers, setMarkers] = useState([]);
@@ -12,10 +22,11 @@ const UserLocation = () => {
   const [isMapReady, setIsMapReady] = useState(false);
   const parentControlMapRef = useRef(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const messages = useSelector(state => state.message.messages);
 
-  console.log(messages, 'meaasge');
+  console.log(messages, 'messages');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +56,7 @@ const UserLocation = () => {
         }));
 
         setMarkers(markersData);
-        console.log(markersData, 'markeresdata');
+        console.log(markersData, 'markersData');
       } catch (error) {
         console.error('Error fetching user places:', error);
       }
@@ -65,7 +76,12 @@ const UserLocation = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.chatContainer}>
+        {/* Display the ChatScreen component */}
+        <ChatScreen />
+      </View>
       <View style={styles.mapContainer}>
+        {/* Display the MapView component */}
         <MapControl
           onMapReady={() => setIsMapReady(true)}
           ref={parentControlMapRef}
@@ -79,35 +95,60 @@ const UserLocation = () => {
               style={styles.button}
               onPress={() => {
                 animateToRegion(marker.coordinate);
-                setSelectedMarker(marker);
               }}>
               <Text style={styles.buttonText}>
                 {marker.title}
                 {/* {marker.userId} */}
               </Text>
-              {messages.some(message => message.sender === marker.userId) && (
-                <Image
-                  source={require('/Users/santhiyavelusamy/Documents/ReactNative/FinalProject/src/assets/images/msg.png')}
-                  style={styles.icon}
-                />
-              )}
+              <TouchableOpacity
+                onPress={() => {
+                  setSelectedMarker(marker);
+                  setModalVisible(true);
+                }}>
+                {messages.some(message => message.sender === marker.userId) && (
+                  <Image
+                    source={require('/Users/santhiyavelusamy/Documents/ReactNative/FinalProject/src/assets/images/msg.png')}
+                    style={styles.icon}
+                  />
+                )}
+              </TouchableOpacity>
             </TouchableOpacity>
           </View>
         ))}
       </View>
+      <Modal visible={isModalVisible} animationType="slide">
+        <View style={styles.modalContainer}>
+          {/* Header */}
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalHeaderText}>
+              Messages for {selectedMarker.title}:
+            </Text>
+          </View>
 
-      {/* Display received messages */}
-      {selectedMarker && (
-        <View>
-          {messages
-            .filter(message => message.sender === selectedMarker.userId)
-            .map((message, index) => (
-              <Text key={index}>
-                {message.sender}: {message.text}
-              </Text>
-            ))}
+          {/* Message List */}
+          <FlatList
+            data={messages.filter(
+              message => message.sender === selectedMarker.userId,
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({item}) => (
+              <View style={styles.messageItem}>
+                <Text style={styles.senderName}>{item.sender}:</Text>
+                <Text style={styles.messageText}>{item.text}</Text>
+              </View>
+            )}
+          />
+
+          {/* Close Button */}
+          <View style={styles.closeButtonContainer}>
+            <Button
+              title="Close"
+              onPress={() => setModalVisible(false)}
+              color="#FF5733" // You can customize the color
+            />
+          </View>
         </View>
-      )}
+      </Modal>
     </View>
   );
 };
