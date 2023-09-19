@@ -12,41 +12,21 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import ActionSheet from 'react-native-action-sheet';
-import {UserLocation} from '../containers';
 import MapView, {Marker} from 'react-native-maps';
 import firestore from '@react-native-firebase/firestore';
-import styles from './styles';
 import {addMessage, receiveMessage} from '../feature/messageSlice/messageSlice';
+import styles from './styles';
 
 const ChatScreen = () => {
   const uid = useSelector(state => state.user?.user?.uid);
+  const selectedUuid = uid; // Add this line to set selectedUuid
 
-  const pubnub = new PubNub({
-    publishKey: 'pub-c-f2919219-ac20-4403-b537-a678b79b4381',
-    subscribeKey: 'sub-c-c5ddc634-c6fc-11e7-afd4-56ea5891403c',
-    uuid: uid, // Default UUID
-  });
-
-  return (
-    <PubNubProvider client={pubnub}>
-      <View style={styles.container}>
-        <View style={styles.chatContainer}>
-          <Chat selectedUuid={uid} />
-        </View>
-      </View>
-    </PubNubProvider>
-  );
-};
-
-function Chat({selectedUuid}) {
   const dispatch = useDispatch();
+
   const pubnub = usePubNub();
-  const [channels] = useState(['ITC', selectedUuid]);
-  const [messages, setaddMessage] = useState([]);
   const [message, setMessage] = useState('');
   const [allUserIds, setAllUserIds] = useState([]);
   const [selectedUserChannel, setselectedUserChannel] = useState('');
-
   const [loadingUserIds, setLoadingUserIds] = useState(true);
 
   useEffect(() => {
@@ -61,8 +41,9 @@ function Chat({selectedUuid}) {
         querySnapshot.forEach(doc => {
           const data = doc.data();
           const userId = data.userId;
+          const userName = data.author;
 
-          userIds.push(userId);
+          userIds.push({userId, userName});
         });
 
         console.log('All User IDs:', userIds);
@@ -80,8 +61,8 @@ function Chat({selectedUuid}) {
     if (loadingUserIds) {
       return; // Don't open the dropdown if user IDs are still loading
     }
-    const options = ['Cancel', ...allUserIds, 'ITC'];
-    console.log(options, 'options');
+    const userNames = allUserIds.map(user => user.userName);
+    const options = ['Cancel', ...userNames, 'ITC'];
 
     ActionSheet.showActionSheetWithOptions(
       {
@@ -91,34 +72,24 @@ function Chat({selectedUuid}) {
       buttonIndex => {
         if (buttonIndex > 0) {
           setselectedUserChannel(options[buttonIndex]);
-          console.log(options[buttonIndex], 'options[buttonIndex]');
         }
       },
     );
   };
 
-  const handleMessage = event => {
-    console.log('message trigger');
-    const message = event.message;
-    if (typeof message === 'string' || message.hasOwnProperty('text')) {
-      const text = message.text || message;
-      const newMessage = {sender: event.publisher, text: text};
-      setaddMessage(messages => [...messages, newMessage]);
-
-      console.log('New message from receive', event.publisher, ':', text);
-      dispatch(receiveMessage(newMessage));
-      // Handle messages from others here
-    }
-  };
-
-  const sendMessage = message => {
+  const sendMessage = () => {
     if (message) {
-      console.log(messages, 'sendmessages');
       pubnub
         .publish({channel: selectedUserChannel, message})
         .then(() => {
           setMessage('');
-          dispatch(addMessage({sender: 'You', text: message}));
+          dispatch(
+            addMessage({
+              sender: selectedUuid,
+              text: message,
+              channel: selectedUserChannel,
+            }),
+          );
         })
         .catch(error => {
           console.error('Error publishing message:', error);
@@ -126,19 +97,8 @@ function Chat({selectedUuid}) {
     }
   };
 
-  useEffect(() => {
-    pubnub.addListener({message: handleMessage});
-    pubnub.subscribe({channels});
-
-    return () => {
-      pubnub.removeListener({message: handleMessage});
-    };
-  }, [channels]);
-
   return (
     <View style={styles.chatScreen}>
-      {/* <Text style={styles.chatHeader}>Chat Screen</Text> */}
-
       {/* Show ActionSheet button */}
       <View style={styles.row}>
         <TouchableOpacity
@@ -159,16 +119,12 @@ function Chat({selectedUuid}) {
           style={styles.messageInput}
         />
 
-        <TouchableOpacity
-          style={styles.sendButton}
-          onPress={() => {
-            sendMessage(message);
-          }}>
-          <Text style={styles.sendButtonText}>>></Text>
+        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+          <Text style={styles.sendButtonText}>send</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-}
+};
 
 export default ChatScreen;

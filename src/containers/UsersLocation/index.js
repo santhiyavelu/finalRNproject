@@ -15,6 +15,7 @@ import MapControl from '../../controls/Mapcontrol';
 import styles from './style';
 import {useSelector} from 'react-redux';
 import ChatScreen from '../../chatScreeen';
+import pubnub from '../../helpers/pubnubhelper';
 
 const UserLocation = () => {
   const [markers, setMarkers] = useState([]);
@@ -23,8 +24,34 @@ const UserLocation = () => {
   const parentControlMapRef = useRef(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [receivedMessages, setReceivedMessages] = useState([]);
+
+  const uid = useSelector(state => state.user?.user?.uid);
+
+  const [channels] = useState(['ITC', uid]);
 
   const messages = useSelector(state => state.message.messages);
+
+  useEffect(() => {
+    const handleMessage = event => {
+      console.log('message trigger');
+      const message = event.message;
+      if (typeof message === 'string' || message.hasOwnProperty('text')) {
+        const text = message.text || message;
+        const newMessage = {sender: event.publisher, text: text};
+        setReceivedMessages(prevMessages => [...prevMessages, newMessage]);
+
+        console.log('New message from receive', receivedMessages);
+      }
+    };
+    pubnub.addListener({message: handleMessage});
+    pubnub.subscribe({channels});
+
+    return () => {
+      pubnub.removeListener({message: handleMessage});
+      pubnub.unsubscribe({channels});
+    };
+  }, [channels]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +80,18 @@ const UserLocation = () => {
           userId: place.userId,
         }));
 
+        // Add an additional object with "ITC" text
+        markersData.push({
+          coordinate: {
+            // Provide the latitude and longitude for the "ITC" location
+            latitude: 0,
+            longitude: 0,
+          },
+          color: 'red', // Set the color for ITC
+          title: 'ITC',
+          userId: 'ITC_USER_ID', // You can set a specific user ID for ITC if needed
+        });
+        console.log(markersData, 'markersdata');
         setMarkers(markersData);
       } catch (error) {
         console.error('Error fetching user places:', error);
@@ -102,12 +141,13 @@ const UserLocation = () => {
                   setSelectedMarker(marker);
                   setModalVisible(true);
                 }}>
-                {messages.some(message => message.sender === marker.userId) && (
-                  <Image
-                    source={require('/Users/santhiyavelusamy/Documents/ReactNative/FinalProject/src/assets/images/msg.png')}
-                    style={styles.icon}
-                  />
-                )}
+                {messages.some(message => message.sender === marker.userId) &&
+                  !isModalVisible && (
+                    <Image
+                      source={require('/Users/santhiyavelusamy/Documents/ReactNative/FinalProject/src/assets/images/msg.png')}
+                      style={styles.icon}
+                    />
+                  )}
               </TouchableOpacity>
             </TouchableOpacity>
           </View>
@@ -117,15 +157,26 @@ const UserLocation = () => {
         <View style={styles.modalContainer}>
           {/* Header */}
           <View style={styles.modalHeader}>
-            <Text style={styles.modalHeaderText}>
-              Messages for {selectedMarker?.title}:
-            </Text>
+            <FlatList
+              data={receivedMessages}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({item}) => (
+                <View>
+                  <Text>
+                    Message from
+                    {item.sender}: {item.text}
+                  </Text>
+                </View>
+              )}
+            />
           </View>
 
           {/* Message List */}
           <FlatList
             data={messages.filter(
-              message => message.sender === selectedMarker?.userId,
+              message =>
+                message.sender === selectedMarker?.userId ||
+                selectedMarker?.userId === 'ITC_USER_ID',
             )}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (

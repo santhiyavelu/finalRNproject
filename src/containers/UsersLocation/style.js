@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     // justifyContent: 'space-between',
     // alignItems: 'center',
-    paddingHorizontal: 2,
+    paddingHorizontal: 1,
     paddingVertical: 8,
     backgroundColor: '#f0f0f0',
   },

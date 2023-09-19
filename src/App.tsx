@@ -4,13 +4,17 @@ import NavigationScreen from './navigationscreen';
 import {Provider} from 'react-redux';
 import store from './store';
 import 'react-native-gesture-handler';
+import {PubNubProvider} from 'pubnub-react';
+import pubnub from './helpers/pubnubhelper';
 
 function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <NavigationScreen />
-      </NavigationContainer>
+      <PubNubProvider client={pubnub}>
+        <NavigationContainer>
+          <NavigationScreen />
+        </NavigationContainer>
+      </PubNubProvider>
     </Provider>
   );
 }
