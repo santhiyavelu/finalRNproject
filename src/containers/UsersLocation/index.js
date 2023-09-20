@@ -13,9 +13,11 @@ import MapView, {Marker} from 'react-native-maps';
 import firestore from '@react-native-firebase/firestore';
 import MapControl from '../../controls/Mapcontrol';
 import styles from './style';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import ChatScreen from '../../chatScreeen';
-import pubnub from '../../helpers/pubnubhelper';
+import {usePubNub} from 'pubnub-react';
+import {resetMessage} from '../../feature/messageSlice/messageSlice';
+// import ActionSheet from 'react-native-actions-sheet';
 
 const UserLocation = () => {
   const [markers, setMarkers] = useState([]);
@@ -23,35 +25,19 @@ const UserLocation = () => {
   const [isMapReady, setIsMapReady] = useState(false);
   const parentControlMapRef = useRef(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
+  const [messageList, setMessageList] = useState([]);
   const [isModalVisible, setModalVisible] = useState(false);
   const [receivedMessages, setReceivedMessages] = useState([]);
+  const actionSheetRef = useRef(null);
 
+  const pubnub = usePubNub();
+  const dispatch = useDispatch();
   const uid = useSelector(state => state.user?.user?.uid);
 
   const [channels] = useState(['ITC', uid]);
 
   const messages = useSelector(state => state.message.messages);
-
-  useEffect(() => {
-    const handleMessage = event => {
-      console.log('message trigger');
-      const message = event.message;
-      if (typeof message === 'string' || message.hasOwnProperty('text')) {
-        const text = message.text || message;
-        const newMessage = {sender: event.publisher, text: text};
-        setReceivedMessages(prevMessages => [...prevMessages, newMessage]);
-
-        console.log('New message from receive', receivedMessages);
-      }
-    };
-    pubnub.addListener({message: handleMessage});
-    pubnub.subscribe({channels});
-
-    return () => {
-      pubnub.removeListener({message: handleMessage});
-      pubnub.unsubscribe({channels});
-    };
-  }, [channels]);
+  console.log(messages, 'messsages');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,6 +87,34 @@ const UserLocation = () => {
     fetchData();
   }, []);
 
+  const handleMessage = event => {
+    console.log(event, 'message trigger');
+    const message = event?.message;
+    if (typeof message === 'string' || message.hasOwnProperty('text')) {
+      console.log(message, 'message afte if loop');
+      const text = message;
+      const newMessage = {
+        sender: event.publisher,
+        channel: event.channel,
+        text: text,
+      };
+
+      setReceivedMessages(prevMessages => [...prevMessages, newMessage]);
+
+      console.log('New message from receive', receivedMessages);
+    }
+  };
+
+  useEffect(() => {
+    pubnub.addListener({message: handleMessage});
+    pubnub.subscribe({channels});
+    console.log('New message from receive', receivedMessages);
+    return () => {
+      pubnub.removeListener({message: handleMessage});
+      pubnub.unsubscribe({channels});
+    };
+  }, [channels]);
+
   const animateToRegion = coords => {
     parentControlMapRef.current?.animateToRegion({
       latitude: coords.latitude,
@@ -108,6 +122,12 @@ const UserLocation = () => {
       latitudeDelta: 0.015,
       longitudeDelta: 0.0121,
     });
+  };
+
+  const handlesetModalVisible = () => {
+    setModalVisible(false);
+    setReceivedMessages([]);
+    dispatch(resetMessage);
   };
 
   return (
@@ -138,10 +158,13 @@ const UserLocation = () => {
               </Text>
               <TouchableOpacity
                 onPress={() => {
-                  setSelectedMarker(marker);
+                  // setSelectedMarker(marker);
+                  actionSheetRef.current?.show();
                   setModalVisible(true);
                 }}>
-                {messages.some(message => message.sender === marker.userId) &&
+                {receivedMessages.some(
+                  message => message.sender === marker.userId,
+                ) &&
                   !isModalVisible && (
                     <Image
                       source={require('/Users/santhiyavelusamy/Documents/ReactNative/FinalProject/src/assets/images/msg.png')}
@@ -170,14 +193,9 @@ const UserLocation = () => {
               )}
             />
           </View>
-
           {/* Message List */}
           <FlatList
-            data={messages.filter(
-              message =>
-                message.sender === selectedMarker?.userId ||
-                selectedMarker?.userId === 'ITC_USER_ID',
-            )}
+            data={messages}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (
               <View style={styles.messageItem}>
@@ -191,7 +209,7 @@ const UserLocation = () => {
           <View style={styles.closeButtonContainer}>
             <Button
               title="Close"
-              onPress={() => setModalVisible(false)}
+              onPress={() => handlesetModalVisible()}
               color="#FF5733"
             />
           </View>

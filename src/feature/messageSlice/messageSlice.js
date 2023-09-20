@@ -11,16 +11,12 @@ export const messageSlice = createSlice({
         messages: [...state.messages, action.payload],
       };
     },
-    receiveMessage: (state, action) => {
-      console.log('receiving a new message:', action.payload);
-      return {
-        ...state,
-        messages: [...state.messages, action.payload],
-      };
+    resetMessage: state => {
+      return {messages: []}; // Reset the messages property to an empty array
     },
   },
 });
 
-export const {addMessage, receiveMessage} = messageSlice.actions;
+export const {addMessage, resetMessage} = messageSlice.actions;
 
 export default messageSlice.reducer;

@@ -1,33 +1,32 @@
 import React, {useEffect, useState} from 'react';
-import PubNub from 'pubnub';
-import {PubNubProvider, usePubNub} from 'pubnub-react';
 import {
   Text,
   View,
   TouchableOpacity,
   TextInput,
-  FlatList,
   StyleSheet,
-  Dimensions,
+  ScrollView,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import ActionSheet from 'react-native-action-sheet';
-import MapView, {Marker} from 'react-native-maps';
 import firestore from '@react-native-firebase/firestore';
-import {addMessage, receiveMessage} from '../feature/messageSlice/messageSlice';
+import {addMessage} from '../feature/messageSlice/messageSlice';
+import DropDownPicker from 'react-native-dropdown-picker';
+import {usePubNub} from 'pubnub-react';
 import styles from './styles';
 
 const ChatScreen = () => {
   const uid = useSelector(state => state.user?.user?.uid);
-  const selectedUuid = uid; // Add this line to set selectedUuid
+  const selectedUuid = uid;
 
   const dispatch = useDispatch();
 
-  const pubnub = usePubNub();
   const [message, setMessage] = useState('');
   const [allUserIds, setAllUserIds] = useState([]);
-  const [selectedUserChannel, setselectedUserChannel] = useState('');
-  const [loadingUserIds, setLoadingUserIds] = useState(true);
+  const [selectedUserChannel, setSelectedUserChannel] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+
+  const pubnub = usePubNub();
 
   useEffect(() => {
     const fetchAllUserIds = async () => {
@@ -46,48 +45,31 @@ const ChatScreen = () => {
           userIds.push({userId, userName});
         });
 
-        console.log('All User IDs:', userIds);
-        setAllUserIds(userIds); // Update the state
+        userIds.push({
+          userName: 'ITC',
+          userId: 'ITC_USER_ID',
+        });
+
+        setAllUserIds(userIds);
       } catch (error) {
         console.error('Error fetching all user IDs:', error);
-      } finally {
-        setLoadingUserIds(false); // Update loading state
       }
     };
     fetchAllUserIds();
   }, []);
 
-  const showUidActionSheet = () => {
-    if (loadingUserIds) {
-      return; // Don't open the dropdown if user IDs are still loading
-    }
-    const userNames = allUserIds.map(user => user.userName);
-    const options = ['Cancel', ...userNames, 'ITC'];
-
-    ActionSheet.showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex: 0,
-      },
-      buttonIndex => {
-        if (buttonIndex > 0) {
-          setselectedUserChannel(options[buttonIndex]);
-        }
-      },
-    );
-  };
-
   const sendMessage = () => {
-    if (message) {
+    if (message && value) {
       pubnub
-        .publish({channel: selectedUserChannel, message})
+        .publish({channel: value, message})
         .then(() => {
           setMessage('');
           dispatch(
             addMessage({
               sender: selectedUuid,
               text: message,
-              channel: selectedUserChannel,
+              channel: value,
+              publisher: selectedUuid,
             }),
           );
         })
@@ -98,15 +80,7 @@ const ChatScreen = () => {
   };
 
   return (
-    <View style={styles.chatScreen}>
-      {/* Show ActionSheet button */}
-      <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.sendButton}
-          onPress={showUidActionSheet}>
-          <Text style={styles.sendButtonText}>Select the Sender</Text>
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
       <View style={styles.inputContainer}>
         <TextInput
           autoComplete="off"
@@ -120,8 +94,25 @@ const ChatScreen = () => {
         />
 
         <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-          <Text style={styles.sendButtonText}>send</Text>
+          <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.dropdownContainer}>
+        <DropDownPicker
+          open={open}
+          value={value}
+          items={allUserIds.map(data => ({
+            label: data.userName,
+            value: data.userId,
+          }))}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setSelectedUserChannel}
+          placeholder="Select Channel"
+          style={styles.dropdown}
+          containerStyle={styles.dropdownContainerStyle}
+          textStyle={styles.dropdownTextStyle}
+        />
       </View>
     </View>
   );
