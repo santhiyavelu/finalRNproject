@@ -12,10 +12,16 @@ const MessageScreen = ({
 }) => {
   const dispatch = useDispatch();
   const channelMessages = useSelector(state => state.message.channelMessages);
+  const channelIDs = Object.keys(channelMessages);
 
   const hideActionSheet = () => {
     actionSheetRef.current?.hide();
-    dispatch(clearMessages);
+    channelIDs.forEach(channelID => {
+      const messagesForChannel = channelMessages[channelID];
+      console.log('Channel ID:', channelID);
+      console.log('Messages:', messagesForChannel);
+      dispatch(clearMessages({channel: channelID}));
+    });
     clearReceivedMessages();
   };
 
