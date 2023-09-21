@@ -1,22 +1,28 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-export const messageSlice = createSlice({
-  name: 'messageSlice',
-  initialState: {messages: []}, // Add user property to store user information
+const initialState = {
+  channelMessages: {},
+};
+
+const messageSlice = createSlice({
+  name: 'channelMessages',
+  initialState,
   reducers: {
-    addMessage: (state, action) => {
-      console.log('Adding a new message:', action.payload);
-      return {
-        ...state,
-        messages: [...state.messages, action.payload],
-      };
+    addMessageToChannel: (state, action) => {
+      const {channel, text, author} = action.payload;
+      // Add the message to the corresponding channel in state
+      console.log(channel, text, author, 'message from stores');
+      if (!state.channelMessages[channel]) {
+        state.channelMessages[channel] = [];
+      }
+      state.channelMessages[channel].push(text);
     },
-    resetMessage: state => {
-      return {messages: []}; // Reset the messages property to an empty array
+    clearMessages: (state, action) => {
+      const {channel} = action.payload;
+      state.channelMessages[channel] = [];
     },
   },
 });
 
-export const {addMessage, resetMessage} = messageSlice.actions;
-
+export const {addMessageToChannel, clearMessages} = messageSlice.actions;
 export default messageSlice.reducer;

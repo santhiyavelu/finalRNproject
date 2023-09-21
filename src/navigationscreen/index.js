@@ -10,6 +10,7 @@ import {useEffect, useState} from 'react';
 import DrawerNavigation from '../drawernavigation';
 import {useDispatch, useSelector} from 'react-redux';
 import {logIn} from '../feature/userSlice/UserSlice';
+import MessageScreen from '../containers/UsersLocation/Messagescreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,11 @@ const NavigationScreen = () => {
         <Stack.Screen
           name="DashBoard"
           component={DrawerNavigation}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Message"
+          component={MessageScreen}
           options={{headerShown: false}}
         />
       </Stack.Group>

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
-import {addMessage} from '../feature/messageSlice/messageSlice';
+import {addMessageToChannel} from '../feature/messageSlice/messageSlice';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {usePubNub} from 'pubnub-react';
 import styles from './styles';
@@ -25,6 +25,7 @@ const ChatScreen = () => {
   const [selectedUserChannel, setSelectedUserChannel] = useState(null);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
+  const channelMessages = useSelector(state => state.message.channelMessages);
 
   const pubnub = usePubNub();
 
@@ -65,13 +66,14 @@ const ChatScreen = () => {
         .then(() => {
           setMessage('');
           dispatch(
-            addMessage({
+            addMessageToChannel({
               sender: selectedUuid,
               text: message,
               channel: value,
               publisher: selectedUuid,
             }),
           );
+          console.log('Message added successfully');
         })
         .catch(error => {
           console.error('Error publishing message:', error);
